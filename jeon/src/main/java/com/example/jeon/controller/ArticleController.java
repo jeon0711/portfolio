@@ -22,4 +22,5 @@ public class ArticleController {
         Article saveArticle=articleService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveArticle);
     }
+
 }
