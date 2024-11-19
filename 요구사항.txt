@@ -1,0 +1,4 @@
+single page view application일것
+article들로 프로젝트들을 소개할것.
+이미지(명함사진)을 등재할것
+배포까지 완료할것
