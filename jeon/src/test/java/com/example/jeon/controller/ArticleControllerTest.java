@@ -75,7 +75,7 @@ class ArticleControllerTest {
 
         final ResultActions result= mockMvc.perform(get(url,savedArticle.getId()));
 
-        result.andExpect(status().isCreated());
+        result.andExpect(status().isOk());
         List<Article> articles=articleRepository.findAll();
         assertThat(articles.size()).isEqualTo(1);
         assertThat(articles.getFirst().getTitle()).isEqualTo(title);
@@ -85,7 +85,7 @@ class ArticleControllerTest {
     @Test
     public void deleteArticles() throws Exception
     {
-        final String url="/articles";
+        final String url="/articles/{id}";
         final String title="testTitle";
         final String content="testContent";
         Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());
@@ -97,7 +97,7 @@ class ArticleControllerTest {
     @Test
     public void updateArticles() throws Exception
     {
-        final String url="/articles";
+        final String url="/articles/{id}";
         final String title="testTitle";
         final String content="testContent";
         Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());
