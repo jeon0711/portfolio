@@ -8,8 +8,13 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
 @Service
+@RequestMapping("/profile")
 public class S3Service {
 
     private final S3Client s3Client;
@@ -20,8 +25,11 @@ public class S3Service {
     public S3Service(S3Client s3Client) {
         this.s3Client = s3Client;
     }
-
-    public String uploadFile(MultipartFile file) {
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
+        }
         String fileName = file.getOriginalFilename();
 
         try {
@@ -33,7 +41,7 @@ public class S3Service {
 
             s3Client.putObject(putObjectRequest, Paths.get(fileName));
 
-            return "File uploaded successfully: " + fileName;
+            return ResponseEntity.ok("File uploaded successfully: " + fileName);
         } catch (IOException e) {
             throw new RuntimeException("Error uploading file to S3", e);
         }

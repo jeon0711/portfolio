@@ -7,10 +7,13 @@ import com.example.jeon.repository.ArticleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@RequestMapping("/article")
 public class ArticleService {
     private final ArticleRepository articleRepository;
     public Article save(AddArticleRequest request)
