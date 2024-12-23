@@ -11,18 +11,16 @@ import java.nio.file.Paths;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
+
 @Service
-@RequestMapping("/profile")
-public class S3Service {
+public class ProfileService {
 
     private final S3Client s3Client;
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
 
-    public S3Service(S3Client s3Client) {
+    public ProfileService(S3Client s3Client) {
         this.s3Client = s3Client;
     }
     @PostMapping("/upload")
