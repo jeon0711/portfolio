@@ -34,7 +34,30 @@ public class S3configure {
                 .apiCallAttemptTimeout(Duration.ofSeconds(90))
                 .retryPolicy(RetryMode.STANDARD)
                 .build();
+    @Bean
+    public S3AsyncClient s3configure() {
+        // Netty HTTP Client 설정
+        SdkAsyncHttpClient httpClient = NettyNioAsyncHttpClient.builder()
+                .maxConcurrency(50)  // 동시 연결 수 제한
+                .connectionTimeout(Duration.ofSeconds(60))
+                .readTimeout(Duration.ofSeconds(60))
+                .writeTimeout(Duration.ofSeconds(60))
+                .build();
 
+        // Client Override 설정
+        ClientOverrideConfiguration overrideConfig = ClientOverrideConfiguration.builder()
+                .apiCallTimeout(Duration.ofMinutes(2))
+                .apiCallAttemptTimeout(Duration.ofSeconds(90))
+                .retryPolicy(RetryMode.STANDARD)
+                .build();
+
+        // S3AsyncClient 생성 및 반환
+        return S3AsyncClient.builder()
+                .region(Region.US_EAST_1) // 원하는 리전을 설정
+                .httpClient(httpClient)
+                .overrideConfiguration(overrideConfig)
+                .build();
+    }
         // S3AsyncClient 생성 및 반환
         return S3AsyncClient.builder()
                 .region(Region.US_EAST_1) // 원하는 리전을 설정
