@@ -1,7 +1,9 @@
 package com.example.jeon.controller;
 
 import com.example.jeon.S3Service.ProfileService;
+import com.example.jeon.domain.UserProfile;
 import com.example.jeon.dto.AddUserProfile;
+import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.jeon.ArticleService.ArticleService;
 import com.example.jeon.domain.Article;
@@ -13,9 +15,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.profiles.Profile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,27 +30,36 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     @PostMapping("/")
-    public ResponseEntity<Profile> addProfile(@RequestBody AddUserProfile request)
-    {
+    public ResponseEntity<UserProfile> saveFile(@RequestParam String itemName, @RequestParam MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            UserProfile rt = profileService.saveProfile(itemName, file);
+            return ResponseEntity.ok().body(rt);
+        }
+        catch(Throwable e)
+        {
+            return ResponseEntity.internalServerError().build();
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveArticle);
     }
     @GetMapping("/{id}")
     public  ResponseEntity<List<ArticleResponse>> findAllArticle()
     {
+        return ResponseEntity.ok().build();
 
-        return ResponseEntity.ok().body(articles);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long id)
     {
-        articleService.delete(id);
+
         return ResponseEntity.ok().build();
     }
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable long id, @RequestBody UpdateArticleRequest request)
     {
-        Article updatedArticle=articleService.update(id,request);
-        return ResponseEntity.ok().body(updatedArticle);
+
+        return ResponseEntity.ok().build();
     }
 }

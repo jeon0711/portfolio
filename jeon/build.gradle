@@ -40,7 +40,7 @@ dependencies {
 	implementation 'software.amazon.awssdk:ssooidc'
 	// 추가로 필요한 AWS 서비스 예: EC2
 	implementation 'software.amazon.awssdk:ec2'
-	implementation 'software.amazon.awssdk:http-client-netty'
+	implementation("software.amazon.awssdk:netty-nio-client")
 
 }
 

@@ -11,7 +11,7 @@ import software.amazon.awssdk.http.async.SdkAsyncHttpClient;
 import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.retry.RetryMode;
+import software.amazon.awssdk.core.retry.RetryMode;
 
 import java.time.Duration;
 
