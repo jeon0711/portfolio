@@ -13,7 +13,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@RequestMapping("/article")
 public class ArticleService {
     private final ArticleRepository articleRepository;
     public Article save(AddArticleRequest request)

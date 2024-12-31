@@ -1,9 +1,11 @@
 package com.example.jeon.S3Service;
 
 import com.example.jeon.domain.UserProfile;
+import com.example.jeon.repository.UserProfileRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,25 +43,18 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@RequiredArgsConstructor
 @Service
 public class ProfileService {
 
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
-    @Value("${aws.access-key-id}")
-    private String accessKeyId;
     @Value("${aws.region}")
     private String region;
-    @Value("${aws.secret-access-key}")
-    private String secretAccessKey;
     private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
-    public ProfileService(S3AsyncClient s3AsyncClient) {
-        this.s3AsyncClient = s3AsyncClient;
-    }
     private final S3AsyncClient s3AsyncClient;
-
+    private final UserProfileRepository userProfileRepository;
 
     public CompletableFuture<PutObjectResponse> uploadLocalFileAsync(String bucketName, String key, String objectPath) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -74,12 +69,12 @@ public class ProfileService {
             }
         });
     }
-    public UserProfile saveProfile(String itemName,MultipartFile file) throws Throwable {
+    public UserProfile saveProfile(String title,String content, String name,MultipartFile file) throws Throwable {
         //.getParts()로 모든 항목들을 collection형식으로 받을 수 있다
-        String savePath = "./save/";
+        String savePath = "./profile_image/";
         String originalFileName = file.getOriginalFilename();
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+        String uniqueFileName = name+UUID.randomUUID().toString() + fileExtension;
 
         File saveFile = new File(savePath + uniqueFileName);
         if (!saveFile.getParentFile().exists()) {
@@ -88,8 +83,7 @@ public class ProfileService {
 
         file.transferTo(saveFile);
         try {
-            CompletableFuture<PutObjectResponse> future = uploadLocalFileAsync(bucketName, accessKeyId, savePath + uniqueFileName);
-
+            CompletableFuture<PutObjectResponse> future = uploadLocalFileAsync(bucketName,savePath+uniqueFileName, savePath + uniqueFileName);
             future.join();
         }catch(RuntimeException rt) {
             Throwable cause = rt.getCause();
@@ -100,7 +94,22 @@ public class ProfileService {
             }
             throw cause;
         }
-        UserProfile rt = UserProfile.builder().build();
-        return rt;
+        String url=String.format("https://%s.s3.%s.amazonaws.com/%s",
+                bucketName,
+                region, // 자신의 리전에 맞게 설정
+                savePath+uniqueFileName
+        );
+        try {
+            UserProfile rt = UserProfile.builder().title(title).content(content).savedPath(url).build();
+            userProfileRepository.save(rt);
+            return rt;
+        }
+        catch(Exception e)
+        {
+            Throwable cause = e.getCause();
+            logger.info("An unexpected error occurred: " + e.getMessage());
+            throw cause;
+        }
+
     }
 }

@@ -3,7 +3,9 @@ package com.example.jeon.controller;
 import com.example.jeon.S3Service.ProfileService;
 import com.example.jeon.domain.UserProfile;
 import com.example.jeon.dto.AddUserProfile;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.catalina.User;
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.jeon.ArticleService.ArticleService;
 import com.example.jeon.domain.Article;
@@ -20,6 +22,7 @@ import software.amazon.awssdk.profiles.Profile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,25 +33,22 @@ import java.util.UUID;
 public class ProfileController {
     private final ProfileService profileService;
     @PostMapping("/")
-    public ResponseEntity<UserProfile> saveFile(@RequestParam String itemName, @RequestParam MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<UserProfile> saveFile(HttpServletRequest request, @RequestBody AddUserProfile input) throws IOException {
         try {
-            UserProfile rt = profileService.saveProfile(itemName, file);
-            return ResponseEntity.ok().body(rt);
+            String referer = request.getHeader("Referer"); // 요청을 보낸 페이지의 URL
+            String requestURL = request.getRequestURL().toString(); //
+            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getName(),input.getName(), input.getImage());
+            return ResponseEntity.created(URI.create(requestURL)).body(rt);
         }
         catch(Throwable e)
         {
             return ResponseEntity.internalServerError().build();
         }
-
     }
     @GetMapping("/{id}")
     public  ResponseEntity<List<ArticleResponse>> findAllArticle()
     {
         return ResponseEntity.ok().build();
-
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long id)
