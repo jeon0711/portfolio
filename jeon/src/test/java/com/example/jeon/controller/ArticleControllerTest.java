@@ -50,7 +50,7 @@ class ArticleControllerTest {
     @Test
     public void addArticle() throws Exception
     {
-        final String url="/articles";
+        final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
         final AddArticleRequest userRequest=new AddArticleRequest(title,content);
@@ -68,7 +68,7 @@ class ArticleControllerTest {
     @DisplayName("findAllArticles: 글 목록 조회에 성공한다")
     @Test
     public void findAllArticles() throws Exception
-    {final String url="/articles";
+    {final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
         Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());

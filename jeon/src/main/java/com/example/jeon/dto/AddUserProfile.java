@@ -16,7 +16,6 @@ public class AddUserProfile {
     private String title;
     private String content;
     private String name;
-    private MultipartFile image;
     public UserProfile toEntity() {
         return UserProfile.builder().title(title).content(content).name(name).build();
     }

@@ -15,28 +15,29 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/articles")
 public class ArticleController {
     private final ArticleService articleService;
 
-    @PostMapping("/articles")
+    @PostMapping("/")
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request)
     {
         Article saveArticle=articleService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveArticle);
     }
-    @GetMapping("/articles")
+    @GetMapping("/")
     public  ResponseEntity<List<ArticleResponse>> findAllArticle()
     {
         List<ArticleResponse> articles=articleService.findAll().stream().map(ArticleResponse::new).toList();
         return ResponseEntity.ok().body(articles);
     }
-    @DeleteMapping("/articles/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long id)
     {
         articleService.delete(id);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/articles/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable long id, @RequestBody UpdateArticleRequest request)
     {
         Article updatedArticle=articleService.update(id,request);

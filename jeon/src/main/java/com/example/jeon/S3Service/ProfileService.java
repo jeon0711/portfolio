@@ -43,6 +43,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
@@ -82,6 +83,7 @@ public class ProfileService {
         }
 
         file.transferTo(saveFile);
+        logger.info("local image저장성공");
         try {
             CompletableFuture<PutObjectResponse> future = uploadLocalFileAsync(bucketName,savePath+uniqueFileName, savePath + uniqueFileName);
             future.join();
@@ -99,8 +101,12 @@ public class ProfileService {
                 region, // 자신의 리전에 맞게 설정
                 savePath+uniqueFileName
         );
+        logger.info(url);
+        logger.info(bucketName);
+        logger.info(region);
+        logger.info(savePath+uniqueFileName);
         try {
-            UserProfile rt = UserProfile.builder().title(title).content(content).savedPath(url).build();
+            UserProfile rt = UserProfile.builder().title(title).content(content).name(name).savedPath(url).build();
             userProfileRepository.save(rt);
             return rt;
         }

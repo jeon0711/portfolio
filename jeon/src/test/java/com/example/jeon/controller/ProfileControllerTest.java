@@ -84,23 +84,27 @@ public class ProfileControllerTest {
                 "mock image content".getBytes()
         );
 
-        // 2. AddUserProfile 데이터 생성
+        // JSON 데이터 생성
         AddUserProfile input = new AddUserProfile(
                 "Test Title",
                 "Test Content",
-                "Test Name",
-                null // image는 별도로 처리
+                "Test Name"
         );
-
-        // 3. AddUserProfile 객체를 JSON으로 변환
         String inputJson = objectMapper.writeValueAsString(input);
 
-        // 4. 요청 전송 및 검증
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/")
-                        .file(mockImage) // Mock 이미지 파일 추가
-                        .param("title", input.getTitle()) // DTO 필드 추가
-                        .param("content", input.getContent())
-                        .param("name", input.getName()))
+        // JSON 데이터를 포함하는 MockMultipartFile 생성
+        MockMultipartFile mockJson = new MockMultipartFile(
+                "data", // @RequestPart의 이름과 동일해야 함
+                "data.json",
+                "application/json",
+                inputJson.getBytes()
+        );
+
+        // 요청 및 검증
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/profile/")
+                        .file(mockImage)
+                        .file(mockJson) // JSON 데이터 추가
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated());
     }
 }
