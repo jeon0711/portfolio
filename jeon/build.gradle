@@ -34,13 +34,17 @@ dependencies {
 	implementation 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation platform('software.amazon.awssdk:bom:2.27.21')
-	// AWS SDK for S3
 	implementation 'software.amazon.awssdk:s3'
 	implementation 'software.amazon.awssdk:sso'
 	implementation 'software.amazon.awssdk:ssooidc'
-	// 추가로 필요한 AWS 서비스 예: EC2
 	implementation 'software.amazon.awssdk:ec2'
 	implementation("software.amazon.awssdk:netty-nio-client")
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 
 }
 

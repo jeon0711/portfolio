@@ -1,23 +1,14 @@
-package com.example.jeon.S3Service;
+package com.example.jeon.service;
 
 import com.example.jeon.domain.UserProfile;
 import com.example.jeon.repository.UserProfileRepository;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
-import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.http.async.SdkAsyncHttpClient;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.http.async.SdkAsyncHttpClient;
-import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
-import software.amazon.awssdk.http.async.SdkAsyncHttpClient;
-import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
@@ -25,25 +16,9 @@ import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.io.*;
-import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.model.S3Exception;
-import java.io.*;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
@@ -70,6 +45,7 @@ public class ProfileService {
             }
         });
     }
+    @Transactional
     public UserProfile saveProfile(String title,String content, String name,MultipartFile file) throws Throwable {
         //.getParts()로 모든 항목들을 collection형식으로 받을 수 있다
         String savePath = "./profile_image/";
@@ -101,10 +77,6 @@ public class ProfileService {
                 region, // 자신의 리전에 맞게 설정
                 savePath+uniqueFileName
         );
-        logger.info(url);
-        logger.info(bucketName);
-        logger.info(region);
-        logger.info(savePath+uniqueFileName);
         try {
             UserProfile rt = UserProfile.builder().title(title).content(content).name(name).savedPath(url).build();
             userProfileRepository.save(rt);
@@ -118,4 +90,5 @@ public class ProfileService {
         }
 
     }
+
 }

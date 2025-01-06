@@ -15,20 +15,24 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id",updatable = false)
     private Long id;
+    @Column(name="writer",updatable = false)
+    private String name;
     @Column(name="title",nullable = false)
     private String title;
     @Column(name="content",nullable = true)
     private String content;
     @Builder
-    public Article(String title,String content)
+    public Article(String title,String content,String name)
     {
         this.title=title;
         this.content=content;
+        this.name=name;
     }
-    public void update(String title,String content)
+    public void update(String title,String content,String name)
     {
         this.title=title;
         this.content=content;
+        this.name=name;
     }
     // Getters and Setters
 }

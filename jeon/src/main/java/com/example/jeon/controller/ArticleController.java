@@ -1,13 +1,12 @@
 package com.example.jeon.controller;
 
-import com.example.jeon.ArticleService.ArticleService;
+import com.example.jeon.service.ArticleService;
 import com.example.jeon.domain.Article;
 import com.example.jeon.dto.AddArticleRequest;
 import com.example.jeon.dto.ArticleResponse;
 import com.example.jeon.dto.UpdateArticleRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
