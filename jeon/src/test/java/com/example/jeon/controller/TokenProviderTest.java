@@ -97,7 +97,6 @@ class TokenProviderTest {
 
         // when
         Authentication authentication = tokenProvider.getAuthentication(token);
-
         // then
         assertThat(((UserDetails) authentication.getPrincipal()).getUsername()).isEqualTo(userEmail);
     }

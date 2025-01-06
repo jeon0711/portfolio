@@ -1,6 +1,6 @@
 package com.example.jeon.configure;
 
-import com.example.jeon.service.UserDtailService;
+import com.example.jeon.service.UserDetailService;
 import com.example.jeon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserDtailService userDetailService;
+    private final UserDetailService userDetailService;
     @Bean
     public WebSecurityCustomizer configure()
     {

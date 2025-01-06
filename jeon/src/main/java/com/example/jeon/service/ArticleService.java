@@ -5,6 +5,8 @@ import com.example.jeon.dto.AddArticleRequest;
 import com.example.jeon.dto.UpdateArticleRequest;
 import com.example.jeon.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.List;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ArticleService.class);
     public Article save(AddArticleRequest request, String userName) {
         return articleRepository.save(request.toEntity(userName));
     }
