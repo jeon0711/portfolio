@@ -4,6 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,24 +19,31 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id",updatable = false)
     private Long id;
-    @Column(name="writer",updatable = false)
-    private String name;
     @Column(name="title",nullable = false)
     private String title;
     @Column(name="content",nullable = true)
     private String content;
+    @Column(name = "author", nullable = false)
+    private String author;
+
+    @CreatedDate
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @Builder
-    public Article(String title,String content,String name)
-    {
-        this.title=title;
-        this.content=content;
-        this.name=name;
+    public Article(String author, String title, String content) {
+        this.author = author;
+        this.title = title;
+        this.content = content;
     }
-    public void update(String title,String content,String name)
-    {
-        this.title=title;
-        this.content=content;
-        this.name=name;
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
     // Getters and Setters
 }

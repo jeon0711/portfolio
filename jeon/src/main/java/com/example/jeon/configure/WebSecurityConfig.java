@@ -1,5 +1,6 @@
 package com.example.jeon.configure;
 
+import com.example.jeon.service.UserDtailService;
 import com.example.jeon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserService userService;
+    private final UserDtailService userDetailService;
     @Bean
     public WebSecurityCustomizer configure()
     {
@@ -39,7 +40,7 @@ public class WebSecurityConfig {
         throws Exception
     {
         DaoAuthenticationProvider authProvider=new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
+        authProvider.setUserDetailsService(userDetailService);
         authProvider.setPasswordEncoder(bcryptPasswordEncoder);
         return new ProviderManager(authProvider);
     }

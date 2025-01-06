@@ -38,6 +38,7 @@ class ArticleControllerTest {
     private WebApplicationContext context;
     @Autowired
     ArticleRepository articleRepository;
+    @Autowired
 
     @BeforeEach
     public void setMockMvc()
@@ -53,11 +54,12 @@ class ArticleControllerTest {
         final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
+        final String author="testuser";
         final AddArticleRequest userRequest=new AddArticleRequest(title,content);
 
         final String requestBody=objectMapper.writeValueAsString(userRequest);
 
-        ResultActions result= mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(requestBody));
+        ResultActions result= mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(requestBody).header("Author",author));
 
         result.andExpect(status().isCreated());
         List<Article> articles=articleRepository.findAll();
@@ -68,10 +70,11 @@ class ArticleControllerTest {
     @DisplayName("findAllArticles: 글 목록 조회에 성공한다")
     @Test
     public void findAllArticles() throws Exception
-    {final String url="/articles/";
+    { final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());
+        final String author="testuser";
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
 
         final ResultActions result= mockMvc.perform(get(url,savedArticle.getId()));
 
@@ -85,10 +88,11 @@ class ArticleControllerTest {
     @Test
     public void deleteArticles() throws Exception
     {
-        final String url="/articles/{id}";
+        final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());
+        final String author="testuser";
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
         mockMvc.perform(delete(url,savedArticle.getId())).andExpect(status().isOk());
         List<Article> articles=articleRepository.findAll();
         assertThat(articles).isEmpty();
@@ -97,10 +101,11 @@ class ArticleControllerTest {
     @Test
     public void updateArticles() throws Exception
     {
-        final String url="/articles/{id}";
+        final String url="/articles/";
         final String title="testTitle";
         final String content="testContent";
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).build());
+        final String author="testuser";
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
         final String newTitle="new title";
         final String newContent="new content";
         UpdateArticleRequest request=new UpdateArticleRequest(newTitle,newContent);

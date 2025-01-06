@@ -23,12 +23,12 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     @PostMapping("/")
-    public ResponseEntity<UserProfile> saveFile(HttpServletRequest request, @RequestPart("image") MultipartFile image, // 파일 부분
+    public ResponseEntity<UserProfile> saveProfile(HttpServletRequest request, @RequestPart("image") MultipartFile image, // 파일 부분
                                                 @RequestPart("data") AddUserProfile input ) throws IOException {
         try {
             String referer = request.getHeader("Referer"); // 요청을 보낸 페이지의 URL
             String requestURL = request.getRequestURL().toString(); //
-            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getName(), image);
+            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getAuthor(), image);
             return ResponseEntity.created(URI.create(requestURL)).body(rt);
         }
         catch(Throwable e)

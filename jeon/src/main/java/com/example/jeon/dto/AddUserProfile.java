@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class AddUserProfile {
     private String title;
     private String content;
-    private String name;
+    private String author;
     public UserProfile toEntity() {
-        return UserProfile.builder().title(title).content(content).name(name).build();
+        return UserProfile.builder().title(title).content(content).author(author).build();
     }
 }

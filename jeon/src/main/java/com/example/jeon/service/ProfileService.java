@@ -78,7 +78,7 @@ public class ProfileService {
                 savePath+uniqueFileName
         );
         try {
-            UserProfile rt = UserProfile.builder().title(title).content(content).name(name).savedPath(url).build();
+            UserProfile rt = UserProfile.builder().title(title).content(content).author(name).savedPath(url).build();
             userProfileRepository.save(rt);
             return rt;
         }

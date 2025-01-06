@@ -14,14 +14,14 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/api/articles")
 public class ArticleController {
     private final ArticleService articleService;
 
     @PostMapping("/")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request)
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request,@RequestHeader("Author") String author)
     {
-        Article saveArticle=articleService.save(request);
+        Article saveArticle=articleService.save(request,author);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveArticle);
     }
     @GetMapping("/")
