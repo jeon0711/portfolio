@@ -13,7 +13,7 @@ if (deleteButton) {
             location.replace('/articles');
         }
 
-        httpRequest('DELETE',`/articles/${id}`, null, success, fail);
+        httpRequest('DELETE',`/api/articles/${id}`, null, success, fail);
     });
 }
 
@@ -40,7 +40,7 @@ if (modifyButton) {
             location.replace(`/articles/${id}`);
         }
 
-        httpRequest('PUT',`/articles/${id}`, body, success, fail);
+        httpRequest('PUT',`/api/articles/${id}`, body, success, fail);
     });
 }
 
@@ -63,7 +63,7 @@ if (createButton) {
             location.replace('/articles');
         };
 
-        httpRequest('POST','/articles/', body, success, fail)
+        httpRequest('POST','/api/articles/', body, success, fail)
     });
 }
 

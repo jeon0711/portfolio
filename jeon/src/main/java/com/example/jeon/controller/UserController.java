@@ -6,12 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
@@ -19,23 +20,24 @@ public class UserController {
     public String singup(AddUserRequest request)
     {
      userService.save(request);
-     return "redirect:/login";
+     return "redirect:user/login";
     }
     @GetMapping("/login")
     public String login()
     {
-        return "login";
+        return "user/login";
     }
+
     @GetMapping("/signup")
     public String signup()
     {
-        return "signup";
+        return "user/signup";
     }
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response)
     {
         new SecurityContextLogoutHandler().logout(request,response, SecurityContextHolder.getContext().getAuthentication());
-        return "redirect:/login";
+        return "redirect:user/login";
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,11 +23,13 @@ public class ArticleController {
     private final ArticleService articleService;
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
     @PostMapping("/")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request,@RequestHeader("Author") String author)
-    {
-        Article saveArticle=articleService.save(request,author);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveArticle);
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal) {
+        Article savedArticle = articleService.save(request, principal.getName());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedArticle);
     }
+
     @GetMapping("/")
     public  ResponseEntity<List<ArticleResponse>> findAllArticle()
     {

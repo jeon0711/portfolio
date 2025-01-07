@@ -7,16 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/articles")
 public class ArticleViewController {
 
         private final ArticleService articleService;
-
-        @GetMapping("/articles")
+        @GetMapping("/")
         public String getArticles(Model model) {
             List<ArticleListViewResponse> articles =articleService.findAll()
                     .stream()
@@ -27,7 +28,7 @@ public class ArticleViewController {
             return "articleList";
         }
 
-        @GetMapping("/articles/{id}")
+        @GetMapping("/{id}")
         public String getArticle(@PathVariable Long id, Model model) {
             Article article = articleService.findById(id);
             model.addAttribute("article", new ArticleViewResponse(article));
