@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>이력서 - 홍길동</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header>
@@ -41,11 +41,29 @@
 
     <section id="projects">
         <h2>프로젝트</h2>
-        <div class="project-card">
-            <h3>포트폴리오 웹사이트</h3>
-            <p>React로 제작된 개인 프로젝트로, 다크 모드와 반응형 레이아웃을 지원합니다.</p>
-            <a href="https://github.com/username/project" target="_blank">GitHub 보기</a>
+        <div class="container">
+            <button type="button" id="create-btn"
+                    th:onclick="|location.href='@{/articles/new-article}'|"
+                    class="btn btn-secondary btn-sm mb-3">글 등록</button>
+
+            <ul class="article-list">
+                <li class="article-item" th:each="item : ${articles}">
+                    <div class="card">
+                        <div class="card-header" th:text="${item.id}">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${item.title}"></h5>
+                            <p class="card-text" th:text="${item.content}"></p>
+                            <a th:href="@{/articles/{id}(id=${item.id})}" class="btn btn-primary">보러가기</a>
+                        </div>
+                    </div>
+                </li>
+                <br>
+            </ul>
+
+            <button type="button" class="btn btn-secondary" onclick="location.href='/user/logout'">로그아웃</button>
         </div>
+
     </section>
 
     <section id="contact">

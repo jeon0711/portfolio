@@ -17,12 +17,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id",updatable = false)
+     @Column(name = "id", updatable = false, nullable = false)
+     @Setter(AccessLevel.NONE)
     private Long id;
      @Column(name="email",nullable = false,unique = true)
     private String email;
      @Column(name="password")
     private String password;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
+    private UserProfile userProfile;
+
      @Builder
     public User(String email,String password,String auth)
      {
@@ -64,4 +69,13 @@ public class User implements UserDetails {
      {
          return true;
      }
+    public void setUserProfile(UserProfile userProfile) {
+        if (this.userProfile != null) {
+            this.userProfile.setUser(null); // 기존 관계 제거
+        }
+        this.userProfile = userProfile;
+        if (userProfile != null) {
+            userProfile.setUser(this); // 양방향 관계 설정
+        }
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +19,7 @@ public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id",updatable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
     @Column(name="title",nullable = false)
     private String title;
@@ -25,6 +27,9 @@ public class Article {
     private String content;
     @Column(name = "author", nullable = false)
     private String author;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
 
     @CreatedDate
     @Column(name = "created_at")
@@ -44,6 +49,11 @@ public class Article {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+    // 추가 로직: 이미지 추가 메서드
+    public void addImage(Image image) {
+        images.add(image);
+        image.setArticle(this);
     }
     // Getters and Setters
 }
