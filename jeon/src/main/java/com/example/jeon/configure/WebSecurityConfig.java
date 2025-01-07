@@ -32,7 +32,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception
     {
         return http.authorizeRequests(auth-> auth.requestMatchers(new AntPathRequestMatcher("/user/login"),new AntPathRequestMatcher("/user/signup"),new AntPathRequestMatcher("/user/")).permitAll().anyRequest().authenticated()).
-                formLogin(formLogin->formLogin.loginPage("/user/login").defaultSuccessUrl("/articles")).logout(logout->logout.logoutSuccessUrl("/user/login").invalidateHttpSession(true)).csrf(AbstractHttpConfigurer::disable).build();
+                formLogin(formLogin->formLogin.loginPage("/user/login").defaultSuccessUrl("/articles/")).logout(logout->logout.logoutSuccessUrl("/user/login").invalidateHttpSession(true)).csrf(AbstractHttpConfigurer::disable).build();
 
     }
     @Bean
