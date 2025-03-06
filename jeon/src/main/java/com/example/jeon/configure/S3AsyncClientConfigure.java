@@ -27,7 +27,7 @@ public class S3AsyncClientConfigure {
                 .retryPolicy(RetryMode.STANDARD)
                 .build();
         return software.amazon.awssdk.services.s3.S3AsyncClient.builder()
-                .region(Region.AP_SOUTHEAST_2) // 원하는 리전을 설정
+                .region(Region.AP_NORTHEAST_2) // 원하는 리전을 설정
                 .httpClient(httpClient)
                 .overrideConfiguration(overrideConfig)
                 .build();
