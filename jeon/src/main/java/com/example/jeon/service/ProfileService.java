@@ -1,8 +1,10 @@
 package com.example.jeon.service;
 
 import com.example.jeon.domain.Image;
+import com.example.jeon.domain.User;
 import com.example.jeon.domain.UserProfile;
 import com.example.jeon.repository.UserProfileRepository;
+import com.example.jeon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,7 @@ public class ProfileService {
         try {
 
           Image srt= imageService.saveImage(name,file);
-            UserProfile rt = UserProfile.builder().title(title).content(content).author(name).build();
+            UserProfile rt = userProfileRepository.findByAuthor(name).orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
             srt.setUserProfile(rt);
             rt.addImage(srt);
             userProfileRepository.save(rt);

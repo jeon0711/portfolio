@@ -1,6 +1,7 @@
 package com.example.jeon.controller;
 
-
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import com.example.jeon.dto.SynthesisResponse;
 import com.example.jeon.service.SynthesisService;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +13,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/")
 public class SynthesisController {
     private static final Logger logger = LoggerFactory.getLogger(SynthesisController.class);
     private final SynthesisService synthesisService;
+    @GetMapping()
+    public String indexPage()
+    {
+        return "login";
+    }
 
     @GetMapping("{id}")
-    public ResponseEntity<SynthesisResponse> findByEmail(@PathVariable String id) {
-        Optional<SynthesisResponse> rt=synthesisService.findByEmail(id);
-        return rt.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public String findByEmail(@PathVariable String id,Model model) {
+        try {
+            SynthesisResponse rt = synthesisService.findByEmail(id).orElse(null);
+           model.addAttribute("synthesis",rt);
+           return "articleList";
+        }
+        catch(Throwable e)
+        {
+            return "login";
+        }
 
     }
 }

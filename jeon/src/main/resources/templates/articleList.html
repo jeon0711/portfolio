@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="이력서 - ${profile.name}"></title>
+    <title th:text="'이력서 -'+ ${synthesis.userProfile.title}"></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!--
 <header>
     <div class="container">
         <h1 th:text="${profile.name}"></h1>
@@ -15,7 +16,7 @@
         </div>
     </div>
 </header>
-<!--
+
 <nav>
     <ul class="nav-links">
         <li><a href="#about">소개</a></li>
@@ -27,13 +28,14 @@
 -->
 
 <main>
+    <!--
     <section id="about">
-        <h2 th:text="'소개 - ' + ${profile.name}"></h2>
+        <h2 th:text="'소개 - ' + ${synthesis.userProfile.title}"></h2>
         <div class="about-container">
-            <img th:src="${profile.imageUrl}" alt="프로필 사진" class="profile-img">
+            <img th:src="${synthesis.userProfile.image}" alt="프로필 사진" class="profile-img">
             <div class="about-text">
-                <p th:text="${profile.title}"></p>
-                <p th:text="${profile.description}"></p>
+                <p th:text="${synthesis.userProfile.author}"></p>
+                <p th:text="${synthesis.userProfile.content}"></p>
             </div>
         </div>
     </section>
@@ -81,6 +83,7 @@
         <p>Email: honggildong@example.com</p>
         <p>LinkedIn: <a href="https://linkedin.com/in/honggildong" target="_blank">프로필 보기</a></p>
     </section>
+    -->
 </main>
 
 <footer>

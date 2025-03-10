@@ -1,7 +1,9 @@
 package com.example.jeon.service;
 
 import com.example.jeon.domain.User;
+import com.example.jeon.domain.UserProfile;
 import com.example.jeon.dto.AddUserRequest;
+import com.example.jeon.repository.UserProfileRepository;
 import com.example.jeon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,15 +16,21 @@ import java.util.List;
 @Service
 public class UserService  {
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
     public Long save(AddUserRequest dto) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        return userRepository.save(User.builder()
+        User user=User.builder()
                 .email(dto.getEmail())
                 .password(encoder.encode(dto.getPassword()))
-                .build()).getId();
+                .build();
+        UserProfile temp=UserProfile.builder().title(user.getEmail()).content(null).author(user.getEmail()).build();
+       temp.setUser(user);
+       user.setUserProfile(temp);
+       userProfileRepository.save(temp);
+       userRepository.save(user);
+       return user.getId();
     }
 
     public User findById(Long userId) {
