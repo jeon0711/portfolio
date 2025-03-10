@@ -100,7 +100,6 @@ class ArticleControllerTest {
         final String url="/api/articles/";
         final String title="testTitle";
         final String content="testContent";
-        final String author=testUser.getUsername();
         final AddArticleRequest userRequest=new AddArticleRequest(title,content,null);
         final String requestBody=objectMapper.writeValueAsString(userRequest);
         Principal principal = Mockito.mock(Principal.class);
@@ -125,7 +124,7 @@ class ArticleControllerTest {
         final String title="testTitle";
         final String content="testContent";
         final String author=testUser.getUsername();
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).user(testUser).build());
 
         final ResultActions result= mockMvc.perform(get(url,savedArticle.getId()));
 
@@ -143,7 +142,7 @@ class ArticleControllerTest {
         final String title="deltestTitle";
         final String content="testContent";
         final String author=testUser.getUsername();
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).user(testUser).build());
         url=url+savedArticle.getId().toString();
         mockMvc.perform(delete(url)).andExpect(status().isOk());
         Optional<Article> articles=articleRepository.findById(savedArticle.getId());
@@ -157,10 +156,10 @@ class ArticleControllerTest {
         final String title="updatetestTitle";
         final String content="testContent";
         final String author=testUser.getUsername();
-        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).author(author).build());
+        Article savedArticle=articleRepository.save(Article.builder().title(title).content(content).user(testUser).build());
         final String newTitle="updated new title";
         final String newContent="new content";
-        UpdateArticleRequest request=new UpdateArticleRequest(newTitle,newContent);
+        UpdateArticleRequest request=new UpdateArticleRequest(newTitle,newContent,null);
         url=url+savedArticle.getId().toString();
         ResultActions result=mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(request)));
         result.andExpect(status().isOk());
