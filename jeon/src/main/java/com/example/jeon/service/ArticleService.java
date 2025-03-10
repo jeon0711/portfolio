@@ -21,7 +21,8 @@ public class ArticleService {
     private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(ArticleService.class);
     public Article save(AddArticleRequest request, String userName) {
-        return articleRepository.save(request.toEntity(userName));
+        User user=userService.findByEmail(userName);
+        return articleRepository.save(request.toEntity(user));
     }
 
     public List<Article> findAll() {
