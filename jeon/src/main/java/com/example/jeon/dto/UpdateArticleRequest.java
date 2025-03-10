@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +17,5 @@ import lombok.NoArgsConstructor;
 public class UpdateArticleRequest {
     private String title;
     private String content;
+    private List<MultipartFile> images;
 }

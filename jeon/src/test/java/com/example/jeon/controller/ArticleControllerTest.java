@@ -101,7 +101,7 @@ class ArticleControllerTest {
         final String title="testTitle";
         final String content="testContent";
         final String author=testUser.getUsername();
-        final AddArticleRequest userRequest=new AddArticleRequest(title,content);
+        final AddArticleRequest userRequest=new AddArticleRequest(title,content,null);
         final String requestBody=objectMapper.writeValueAsString(userRequest);
         Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn("username");

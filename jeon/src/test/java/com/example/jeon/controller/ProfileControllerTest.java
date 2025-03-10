@@ -104,7 +104,8 @@ public class ProfileControllerTest {
         AddUserProfile input = new AddUserProfile(
                 "Test Title",
                 "Test Content",
-                "Test Name"
+                "Test Name",
+                mockImage
         );
         String inputJson = objectMapper.writeValueAsString(input);
 

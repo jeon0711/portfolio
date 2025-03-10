@@ -25,8 +25,9 @@ public class Article {
     private String title;
     @Column(name="content",nullable = true)
     private String content;
-    @Column(name = "author", nullable = false)
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User author;
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
@@ -40,8 +41,8 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Article(String author, String title, String content) {
-        this.author = author;
+    public Article(User user, String title, String content) {
+        this.author=user;
         this.title = title;
         this.content = content;
     }

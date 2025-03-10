@@ -23,12 +23,11 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     @PostMapping("/")
-    public ResponseEntity<UserProfile> saveProfile(HttpServletRequest request, @RequestPart("image") MultipartFile image, // 파일 부분
-                                                @RequestPart("data") AddUserProfile input ) throws IOException {
+    public ResponseEntity<UserProfile> saveProfile(HttpServletRequest request, @ModelAttribute AddUserProfile input ) throws IOException {
         try {
             String referer = request.getHeader("Referer"); // 요청을 보낸 페이지의 URL
             String requestURL = request.getRequestURL().toString(); //
-            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getAuthor(), image);
+            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getAuthor(), input.getImage());
             return ResponseEntity.created(URI.create(requestURL)).body(rt);
         }
         catch(Throwable e)
@@ -37,8 +36,9 @@ public class ProfileController {
         }
     }
     @GetMapping("/{id}")
-    public  ResponseEntity<List<ArticleResponse>> findAllArticle()
+    public  ResponseEntity<List<ArticleResponse>> findAllArticle()//profile포함 전체
     {
+
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/{id}")

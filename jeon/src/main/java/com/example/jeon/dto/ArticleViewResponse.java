@@ -23,6 +23,6 @@ public class ArticleViewResponse {
         this.title = article.getTitle();
         this.content = article.getContent();
         this.createdAt = article.getCreatedAt();
-        this.author = article.getAuthor();
+        this.author = article.getAuthor().getEmail();
     }
 }

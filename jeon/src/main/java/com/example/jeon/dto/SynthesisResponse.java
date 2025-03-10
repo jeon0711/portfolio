@@ -7,13 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResumeResponse {
-        private final List<Article> articles;
-        private final UserProfile userProfile;
+public class SynthesisResponse {
+        private List<Article> articles;
+        private UserProfile userProfile;
 }

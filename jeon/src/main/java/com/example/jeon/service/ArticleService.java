@@ -1,6 +1,7 @@
 package com.example.jeon.service;
 
 import com.example.jeon.domain.Article;
+import com.example.jeon.domain.User;
 import com.example.jeon.dto.AddArticleRequest;
 import com.example.jeon.dto.UpdateArticleRequest;
 import com.example.jeon.repository.ArticleRepository;
@@ -17,6 +18,7 @@ import java.util.List;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(ArticleService.class);
     public Article save(AddArticleRequest request, String userName) {
         return articleRepository.save(request.toEntity(userName));
@@ -29,6 +31,16 @@ public class ArticleService {
     public Article findById(long id) {
         return articleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+    }
+    public List<Article> findByAuthor(String userEmail)
+    {
+        User author=userService.findByEmail(userEmail);
+        List<Article> rt=articleRepository.findAllByAuthor_Id(author.getId());
+        if(rt.isEmpty())
+        {
+            return null;
+        }
+        return rt;
     }
 
     public void delete(long id) {
