@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,14 +20,17 @@ public class AddUserProfile {
     private String content;
     private String author;
     private MultipartFile image;  // 파일 필드 (nullable)
-
-    public UserProfile toEntity() {//image는s3업로드 완료후 단계에서 넣어줘야한다.
+    private List<String> skills;
+    public UserProfile toEntity() {//image는s3업로드 완료후 단계에서 넣어줘야한다.skills도 따로 처리해줘야
         UserProfile userProfile = UserProfile.builder()
                 .title(title)
                 .content(content)
-                .author(author)
+                .author(author).skills(skills)
                 .build();
 
         return userProfile;
+    }
+    public MultipartFile getImage() {
+        return (image == null || image.isEmpty()) ? null : image;
     }
 }

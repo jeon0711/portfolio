@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<!--
+
 <header>
     <div class="container">
-        <h1 th:text="${profile.name}"></h1>
+        <h1 th:text="${synthesis.userProfile.title}"></h1>
         <div class="about-text">
-            <p th:text="${profile.skills}"></p>
+            <p th:text="${synthesis.userProfile.skills}"></p>
         </div>
     </div>
 </header>
@@ -25,10 +25,8 @@
         <li><a href="#contact">연락처</a></li>
     </ul>
 </nav>
--->
 
 <main>
-    <!--
     <section id="about">
         <h2 th:text="'소개 - ' + ${synthesis.userProfile.title}"></h2>
         <div class="about-container">
@@ -83,7 +81,6 @@
         <p>Email: honggildong@example.com</p>
         <p>LinkedIn: <a href="https://linkedin.com/in/honggildong" target="_blank">프로필 보기</a></p>
     </section>
-    -->
 </main>
 
 <footer>

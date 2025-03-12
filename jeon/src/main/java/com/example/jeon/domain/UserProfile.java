@@ -1,4 +1,5 @@
 package com.example.jeon.domain;
+import com.example.jeon.util.StringListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,11 +21,13 @@ public class UserProfile {
     @Setter(AccessLevel.NONE)
     private Long id;
     @Column(name = "author", nullable = false)
-    private String author;
+    private String author;//이름이다
     @Column(name="title",nullable = false)
     private String title;
     @Column(name="content",nullable = true)
     private String content;
+    @Convert(converter = StringListConverter.class) // JSON 변환 적용
+    private List<String> skills;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -38,25 +41,29 @@ public class UserProfile {
     private User user;
 
     @Builder
-    public UserProfile(String title,String author,String content)
+    public UserProfile(String title,String author,String content,List<String> skills)
     {
         this.title=title;
         this.content=content;
         this.author=author;
+        this.skills=skills;
     }
-    public void update(String title,String content)
+    public void update(String title,String content,List<String>skills)
     {
         this.title=title;
         this.content=content;
+            this.skills=skills;
+
     }
-    public void addImage(Image image) {
-        if (this.image != null) {
-            this.image.setUserProfile(null); // 기존 이미지를 해제
-        }
+    public void addImage(Image image) {//하기전에 비었는지 확인후 안비었으면 이미지 삭제
+
         this.image = image;
-        if (image != null) {
-            image.setUserProfile(this);
-        }
+        image.setUserProfile(this);
+
+    }
+    public void addSkill(String skill) {
+
+        this.skills.add(skill);
     }
     public void setUser(User user) {
         if (this.user != null) {

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/")
+@RequestMapping("/synthesis")
 public class SynthesisController {
     private static final Logger logger = LoggerFactory.getLogger(SynthesisController.class);
     private final SynthesisService synthesisService;
@@ -24,12 +24,12 @@ public class SynthesisController {
         return "login";
     }
 
-    @GetMapping("{id}")
-    public String findByEmail(@PathVariable String id,Model model) {
+    @GetMapping("/{email}")
+    public String findByEmail(@PathVariable String email,Model model) {
         try {
-            SynthesisResponse rt = synthesisService.findByEmail(id).orElse(null);
+            SynthesisResponse rt = synthesisService.findByEmail(email).orElse(null);
            model.addAttribute("synthesis",rt);
-           return "articleList";
+           return "synthesis";
         }
         catch(Throwable e)
         {

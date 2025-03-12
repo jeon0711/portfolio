@@ -24,9 +24,11 @@
                     <p class="fs-5 mb-4" th:text="${article.content}"></p>
                 </section>
                 <button type="button" id="modify-btn"
+                        th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == article.author}"
                         th:onclick="|location.href='@{/articles/new-article?id={articleId}(articleId=${article.id})}'|"
                         class="btn btn-primary btn-sm">수정</button>
                 <button type="button" id="delete-btn"
+                        th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == article.author}"
                         class="btn btn-secondary btn-sm">삭제</button>
             </article>
         </div>

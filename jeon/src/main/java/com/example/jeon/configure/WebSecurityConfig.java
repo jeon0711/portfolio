@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -29,11 +30,24 @@ public class WebSecurityConfig {
         return (web)->web.ignoring().requestMatchers(toH2Console()).requestMatchers(new AntPathRequestMatcher("/static/**"));
     }
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)throws Exception
-    {
-        return http.authorizeRequests(auth-> auth.requestMatchers(new AntPathRequestMatcher("/"),new AntPathRequestMatcher("/user/login"),new AntPathRequestMatcher("/user/signup"),new AntPathRequestMatcher("/user/")).permitAll().anyRequest().authenticated()).
-                formLogin(formLogin->formLogin.loginPage("/user/login").defaultSuccessUrl("/articles/")).logout(logout->logout.logoutSuccessUrl("/user/login").invalidateHttpSession(true)).csrf(AbstractHttpConfigurer::disable).build();
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        // `/synthesis/{email}`에서 {email}이 이메일 형식만 허용
+                        .requestMatchers("/synthesis/{email:.+@.+\\..+}").permitAll()
+                        .requestMatchers("/user/login", "/user/signup", "/user/").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/user/login")
+                        .defaultSuccessUrl("/articles/")
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/user/login")
+                        .invalidateHttpSession(true)
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .build();
     }
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bcryptPasswordEncoder,UserService userService)
