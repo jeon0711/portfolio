@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'이력서 - ' + ${synthesis.userProfile.title}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1 th:text="${synthesis.userProfile.title}"></h1>
+        <p class="lead text-white-50" th:text="${synthesis.userProfile.author}"></p>
+    </div>
+</header>
+
+<nav>
+    <ul class="nav-links">
+        <li><a href="#about">소개</a></li>
+        <li><a href="#skills">기술</a></li>
+        <li><a href="#projects">프로젝트</a></li>
+        <li><a href="#contact">연락처</a></li>
+    </ul>
+</nav>
+
+<main>
+    <!-- 자기소개 섹션 -->
+    <section id="about">
+        <h2>소개</h2>
+        <div class="about-container">
+            <img th:src="${synthesis.userProfile.image}" alt="프로필 사진" class="profile-img">
+            <div class="about-text">
+                <p th:text="${synthesis.userProfile.content}"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 기술 섹션 -->
+    <section id="skills">
+        <h2>기술</h2>
+        <ul class="skills-list">
+            <li th:each="skill : ${synthesis.userProfile.skills}" th:text="${skill}"></li>
+        </ul>
+    </section>
+
+    <!-- 프로젝트 섹션 -->
+    <section id="projects">
+        <h2>프로젝트</h2>
+        <div class="container">
+            <button type="button" id="create-btn"
+                    th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == synthesis.userProfile.author}"
+                    th:onclick="|location.href='@{/articles/new-article}'|"
+                    class="btn btn-secondary btn-sm mb-3">프로젝트 등록</button>
+
+            <div class="row">
+                <div class="col-md-6 mb-4" th:each="article : ${synthesis.articles}">
+                    <div class="card project-card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${article.title}"></h5>
+                            <p class="text-muted" th:text="|작성일: ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|"></p>
+                            <p class="card-text" th:text="${article.content}"></p>
+                            <a th:href="@{/articles/{id}(id=${article.id})}" class="btn btn-primary btn-sm">자세히 보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary mt-4" onclick="location.href='/user/logout'">로그아웃</button>
+        </div>
+    </section>
+
+    <!-- 연락처 섹션 -->
+    <section id="contact">
+        <h2>연락처</h2>
+        <p>Email: honggildong@example.com</p>
+        <p>LinkedIn: <a href="https://linkedin.com/in/honggildong" target="_blank">프로필 보기</a></p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 홍길동. All rights reserved.</p>
+</footer>
+
+<script src="/js/synthesis.js"></script>
+</body>
+</html>

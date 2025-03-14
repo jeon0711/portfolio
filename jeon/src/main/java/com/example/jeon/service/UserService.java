@@ -20,16 +20,26 @@ public class UserService  {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     public Long save(AddUserRequest dto) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        User user=User.builder()
+        User user = User.builder()
                 .email(dto.getEmail())
                 .password(encoder.encode(dto.getPassword()))
                 .build();
-        UserProfile temp=UserProfile.builder().title(user.getEmail()).content(null).author(user.getEmail()).build();
-       temp.setUser(user);
-       user.setUserProfile(temp);
-       userProfileRepository.save(temp);
-       userRepository.save(user);
+
+        // UserProfile 엔티티 생성
+        UserProfile temp = UserProfile.builder()
+                .title(user.getEmail())
+                .content(null)
+                .author(user.getEmail())
+                .name(user.getEmail())
+                .build();
+
+        // 양방향 연관 관계 설정
+        user.setUserProfile(temp);
+        temp.setUser(user);
+
+        // 🚨 `userProfileRepository.save(temp);` 제거하고 `userRepository.save(user);`만 실행
+        userRepository.save(user); // User가 저장되면서 UserProfile도 자동으로 저장됨
+
        return user.getId();
     }
 

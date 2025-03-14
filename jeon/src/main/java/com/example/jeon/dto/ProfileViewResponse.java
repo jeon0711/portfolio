@@ -16,6 +16,7 @@ public class ProfileViewResponse {
         private String title;
         private String content;
         private String author;
+        private String name;
         private Image image;  // 파일 필드 (nullable)
         private List<String> skills;
     public ProfileViewResponse(UserProfile profile)
@@ -25,6 +26,7 @@ public class ProfileViewResponse {
         this.author= profile.getAuthor();
         this.image= profile.getImage();
         this.skills=profile.getSkills();
+        this.name= profile.getName();
 
     }
 }

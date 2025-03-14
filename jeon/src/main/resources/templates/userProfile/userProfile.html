@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 프로필</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+    <style>
+        .gradient-custom {
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+            min-height: 100vh;
+        }
+        .profile-card {
+            max-width: 600px;
+            margin: auto;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #222;
+            color: white;
+            padding: 20px;
+        }
+        .profile-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .skills-list {
+            list-style: none;
+            padding: 0;
+        }
+        .skills-list li {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 3px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="gradient-custom">
+<section class="d-flex align-items-center vh-100">
+    <div class="container">
+        <div class="card profile-card text-center">
+            <!-- 프로필 이미지 -->
+            <div th:if="${userProfile.image}">
+                <img th:src="${userProfile.image.url}" alt="프로필 이미지" class="profile-img">
+            </div>
+
+            <div class="card-body">
+                <!-- 기존 프로필 정보 -->
+                <h2 th:text="${userProfile.title}" id="profile-title">프로필 제목</h2>
+                <p class="text-white-50"><strong>작성자:</strong> <span th:text="${userProfile.name}" id="profile-name">작성자</span></p>
+                <p th:text="${userProfile.content}" id="profile-content">프로필 설명</p>
+
+                <!-- 기술 스택 리스트 -->
+                <h4 class="mt-4">기술 스택</h4>
+                <ul class="skills-list">
+                    <li th:each="skill : ${userProfile.skills}" th:text="${skill}"></li>
+                </ul>
+
+                <!-- 이메일 주소 -->
+                <h5 class="mt-4">📧 이메일</h5>
+                <p id="profile-author" th:text="${userProfile.author}" class="text-white-50">이메일 주소</p>
+
+
+                <!-- 수정 버튼 -->
+                <button class="btn btn-primary mt-3" id="modify-btn"
+                        th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == userProfile.author}">
+                    프로필 수정
+                </button>
+
+                <!-- 수정 폼 (숨김 상태) -->
+                <form id="edit-form" class="hidden">
+                    <div class="form-group">
+                        <label for="name">작성자</label>
+                        <input type="text" id="name" class="form-control" th:value="${userProfile.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">프로필 제목</label>
+                        <input type="text" id="title" class="form-control" th:value="${userProfile.title}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">프로필 설명</label>
+                        <textarea id="content" class="form-control" rows="3" th:text="${userProfile.content}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">프로필 이미지 업로드</label>
+                        <input type="file" id="image" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>기술 스택</label>
+                        <ul id="skills-list" class="skills-list">
+                            <li th:each="skill : ${userProfile.skills}" class="skill-item">
+                                <span th:text="${skill}"></span>
+                                <button type="button" class="btn btn-danger btn-sm ml-2 remove-skill">X</button>
+                            </li>
+                        </ul>
+
+                        <!-- 추가 버튼 -->
+                        <button type="button" id="add-skill" class="btn btn-secondary mt-2">+ 추가</button>
+
+                        <!-- 숨겨진 입력창 (버튼 클릭 시 표시됨) -->
+                        <input type="text" id="new-skill" class="form-control mt-2 hidden" placeholder="새로운 기술 입력 후 Enter" />
+                    </div>
+
+                    <button type="button" class="btn btn-success mt-3" id="save-btn">저장</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/userProfile.js"></script>
+
+</body>
+</html>

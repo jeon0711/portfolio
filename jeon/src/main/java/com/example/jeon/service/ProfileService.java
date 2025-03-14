@@ -1,30 +1,18 @@
 package com.example.jeon.service;
 
 import com.example.jeon.domain.Image;
-import com.example.jeon.domain.User;
 import com.example.jeon.domain.UserProfile;
 import com.example.jeon.repository.UserProfileRepository;
-import com.example.jeon.repository.UserRepository;
-import com.example.jeon.util.StringParser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.async.AsyncRequestBody;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Exception;
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -36,12 +24,12 @@ public class ProfileService {
     private final ImageService imageService;
     private final UserProfileRepository userProfileRepository;
     @Transactional
-    public UserProfile saveProfile(String title, String content, String name, MultipartFile file, List<String> skills) throws Throwable {
+    public UserProfile saveProfile(String title, String content, String author,String name, MultipartFile file, List<String> skills) throws Throwable {
 
         try {
-            UserProfile rt = userProfileRepository.findByAuthor(name).orElseThrow(() -> {
-                logger.error("UserProfile not found for author: " + name);
-                return new IllegalArgumentException("Unexpected user: " + name);
+            UserProfile rt = userProfileRepository.findByAuthor(author).orElseThrow(() -> {
+                logger.error("UserProfile not found for author: " + author);
+                return new IllegalArgumentException("Unexpected user: " + author);
             });
             logger.info(content);
             logger.info(rt.getAuthor());
@@ -55,13 +43,19 @@ public class ProfileService {
 
                 rt.setContent(content);
             }
+            if(name!=null && !name.isEmpty())
+            {
+                rt.setName(name);
+            }
             rt.setSkills(skills);
             if(file!=null && !file.isEmpty()) {
-                logger.info("what");
-                Image srt = imageService.saveImage(name, file);
-                srt.setUserProfile(rt);
-                rt.addImage(srt);
+                Image srt = imageService.saveImage(author, file);
+                if (rt.getImage() != null) {
 
+                   // imageService.deleteImage(rt.getImage().getId(),rt.getImage().getUrl());
+                    imageService.softDeleteImage(rt.getImage().getId());
+                }
+                rt.addImage(srt);
             }
             logger.info(rt.getTitle());
             userProfileRepository.save(rt);
@@ -83,10 +77,10 @@ public class ProfileService {
 
     }
 
-    public UserProfile searchProfile(String name) throws Throwable {
+    public UserProfile searchProfile(String id) throws Throwable {
 
         try {
-            return userProfileRepository.findByAuthor(name).orElse(null);
+            return userProfileRepository.findByAuthor(id).orElse(null);
 
         }catch(RuntimeException rt) {
             Throwable cause = rt.getCause();

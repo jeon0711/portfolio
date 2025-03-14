@@ -54,7 +54,6 @@ public class Article {
     // 추가 로직: 이미지 추가 메서드
     public void addImage(Image image) {
         images.add(image);
-        image.setArticle(this);
     }
     // Getters and Setters
 }

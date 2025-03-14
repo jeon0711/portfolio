@@ -83,9 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let formData = new FormData();
             formData.append("title", document.getElementById("title").value.trim());
             formData.append("content", document.getElementById("content").value.trim());
-            formData.append("author", document.getElementById("profile-author").innerText.trim());
-             let id =  document.getElementById("profile-author").innerText.trim();
+            formData.append("name", document.getElementById("name").value.trim());
+         let id = document.getElementById("profile-author").innerText.trim();
                         console.log("id:",id);
+           formData.append("author", id);
             // 파일이 선택된 경우 추가
             let imageFile = document.getElementById("image").files[0];
             if (imageFile) {

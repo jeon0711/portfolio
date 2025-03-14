@@ -1,5 +1,6 @@
 package com.example.jeon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,12 +19,13 @@ public class Image {
 
     private String url;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = true)
+    @JsonIgnore
     private Article article; // Post와의 관계
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "image")
-    private UserProfile userProfile; // User와의 관계
+    private boolean isActive;
 
     // Getter, Setter
 }

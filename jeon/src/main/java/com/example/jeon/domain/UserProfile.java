@@ -22,6 +22,8 @@ public class UserProfile {
     private Long id;
     @Column(name = "author", nullable = false)
     private String author;//이름이다
+    @Column(name="name",nullable = true)
+    private String name;
     @Column(name="title",nullable = false)
     private String title;
     @Column(name="content",nullable = true)
@@ -41,24 +43,25 @@ public class UserProfile {
     private User user;
 
     @Builder
-    public UserProfile(String title,String author,String content,List<String> skills)
+    public UserProfile(String title,String author,String content,String name,List<String> skills)
     {
         this.title=title;
         this.content=content;
         this.author=author;
         this.skills=skills;
+        this.name=name;
     }
-    public void update(String title,String content,List<String>skills)
+    public void update(String title,String content,String name,List<String>skills)
     {
         this.title=title;
         this.content=content;
             this.skills=skills;
+        this.name=name;
 
     }
     public void addImage(Image image) {//하기전에 비었는지 확인후 안비었으면 이미지 삭제
 
         this.image = image;
-        image.setUserProfile(this);
 
     }
     public void addSkill(String skill) {
@@ -66,12 +69,12 @@ public class UserProfile {
         this.skills.add(skill);
     }
     public void setUser(User user) {
-        if (this.user != null) {
-            this.user.setUserProfile(null);
+        if (this.user != null && this.user != user) {
+            this.user.setUserProfile(null); // 기존 관계 제거
         }
         this.user = user;
-        if (user != null) {
-            user.setUserProfile(this);
+        if (user != null && user.getUserProfile() != this) {
+            user.setUserProfile(this); // 양방향 관계 설정
         }
     }
 }

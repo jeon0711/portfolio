@@ -31,7 +31,7 @@ public class ProfileController {
         try {
             String referer = request.getHeader("Referer"); // 요청을 보낸 페이지의 URL
             String requestURL = request.getRequestURL().toString(); //
-            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getAuthor(), input.getImage(),input.getSkills());
+            UserProfile rt = profileService.saveProfile(input.getTitle(), input.getContent(),input.getAuthor(),input.getName(), input.getImage(),input.getSkills());
             return ResponseEntity.created(URI.create(requestURL)).body(rt);
         }
         catch(Throwable e)

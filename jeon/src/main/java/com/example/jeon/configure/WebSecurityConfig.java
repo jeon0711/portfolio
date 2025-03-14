@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/user/login")
-                        .defaultSuccessUrl("/articles/")
+                        .defaultSuccessUrl("/synthesis/")
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/user/login")
