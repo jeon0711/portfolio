@@ -22,7 +22,7 @@ public class UserController {
      userService.save(request);
      return "redirect:user/login";
     }
-    @GetMapping("/login")
+    @GetMapping("/login")//post는 스프링 security제공
     public String login()
     {
         return "user/login";

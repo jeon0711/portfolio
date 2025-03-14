@@ -27,7 +27,8 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure()
     {
-        return (web)->web.ignoring().requestMatchers(toH2Console()).requestMatchers(new AntPathRequestMatcher("/static/**"));
+        return (web)->web.ignoring().requestMatchers(toH2Console()).requestMatchers(new AntPathRequestMatcher("/css/**"))
+                .requestMatchers(new AntPathRequestMatcher("/js/**")).requestMatchers(new AntPathRequestMatcher("/static/**"));
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,7 +36,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // `/synthesis/{email}`에서 {email}이 이메일 형식만 허용
                         .requestMatchers("/synthesis/{email:.+@.+\\..+}").permitAll()
-                        .requestMatchers("/user/login", "/user/signup", "/user/").permitAll()
+                        .requestMatchers("/user/login", "/user/signup").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin

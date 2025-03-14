@@ -10,21 +10,24 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/articles")
+@RequestMapping("/api/articles" )
 public class ArticleController {
     private final ArticleService articleService;
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
-    @PostMapping("/")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal) {
-        Article savedArticle = articleService.save(request, principal.getName());
+    @PostMapping(value="/")
+    public ResponseEntity<Article> addArticle(@ModelAttribute AddArticleRequest request,
+                                              @RequestParam(value = "images" , required = false) List<MultipartFile> images, Principal principal) {
+        Article savedArticle = articleService.save(request, principal.getName(),images);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
@@ -42,10 +45,10 @@ public class ArticleController {
         articleService.delete(id);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable long id, @RequestBody UpdateArticleRequest request)
+    @PutMapping(value="/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable long id, @ModelAttribute UpdateArticleRequest request, @RequestParam(value = "images" , required = false) List<MultipartFile> images)
     {
-        Article updatedArticle=articleService.update(id,request);
+        Article updatedArticle=articleService.update(id,request,images);
         return ResponseEntity.ok().body(updatedArticle);
     }
 }

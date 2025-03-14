@@ -18,7 +18,6 @@ import java.util.List;
 public class AddArticleRequest {
     private String title;
     private String content;
-    private List<MultipartFile> images;
     public Article toEntity(User author) {
         return Article.builder().title(title).content(content).user(author).build();
     }

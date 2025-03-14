@@ -20,7 +20,7 @@ public class Image {
     private String url;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,optional = true)
     @JoinColumn(name = "article_id", nullable = true)
     @JsonIgnore
     private Article article; // Post와의 관계
