@@ -68,20 +68,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-const deleteButton = document.getElementById('delete-btn');
+const deleteButton = document.getElementById('delete-btn');//첫번째 삭제버튼 가져오게된다.
 
 if (deleteButton) {
     deleteButton.addEventListener('click', event => {
         let id = document.getElementById('article-id').value;
-        function success() {
-            alert('삭제가 완료되었습니다.');
-            location.replace('/articles/');
-        }
+        if (confirm("정말 삭제하시겠습니까?")) {
+                       function success() {
+                           alert("삭제가 완료되었습니다.");
+                           location.replace("/synthesis/");
+                       }
 
-        function fail() {
-            alert('삭제 실패했습니다.');
-            location.replace('/articles/');
-        }
+                       function fail() {
+                           alert("삭제 실패했습니다.");
+                           location.replace("/synthesis/");
+                       }
+
+                       httpRequest("DELETE", `/api/articles/${id}`, null, success, fail);
+                   }
 
         httpRequest('DELETE',`/api/articles/${id}`, null, success, fail);
     });

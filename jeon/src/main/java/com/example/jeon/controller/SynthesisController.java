@@ -25,7 +25,7 @@ public class SynthesisController {
     @GetMapping()
     public String indexPage()
     {
-        return "login";
+        return "redirect:/";
     }
     @GetMapping("/")
     public String findByEmail(Principal principal, Model model) {
@@ -36,7 +36,7 @@ public class SynthesisController {
         }
         catch(Throwable e)
         {
-            return "login";
+            return "user/login";
         }
 
     }
@@ -56,7 +56,7 @@ public class SynthesisController {
             model.addAttribute("synthesis", rt);
             return "synthesis";
         } catch (Throwable e) {
-            return "login";
+            return "user/login";
         }
 
     }

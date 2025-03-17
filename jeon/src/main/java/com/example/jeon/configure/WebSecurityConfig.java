@@ -37,7 +37,9 @@ public class WebSecurityConfig {
                         // `/synthesis/{email}`에서 {email}이 이메일 형식만 허용
                         .requestMatchers("/synthesis/{email:.+@.+\\..+}").permitAll()
                         .requestMatchers("/user/login", "/user/signup").permitAll()
+                        .requestMatchers("/articles/new-article").authenticated()
                         .requestMatchers("/articles/{number}").permitAll()
+                        .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
