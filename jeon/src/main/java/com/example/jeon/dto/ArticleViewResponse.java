@@ -20,6 +20,7 @@ public class ArticleViewResponse {
     private LocalDateTime createdAt;
     private String author;
     private List<Image> images;
+    private List<String> skills;
     public ArticleViewResponse(Article article) {
         this.id = article.getId();
         this.title = article.getTitle();
@@ -27,5 +28,6 @@ public class ArticleViewResponse {
         this.createdAt = article.getCreatedAt();
         this.author = article.getAuthor().getEmail();
         this.images=article.getImages();
+        this.skills=article.getSkills();
     }
 }

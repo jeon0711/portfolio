@@ -20,13 +20,15 @@ public class AddUserProfile {
     private String content;
     private String author;
     private MultipartFile image;  // 파일 필드 (nullable)
-    private List<String> skills;
     private String name;
+    private String phone;
+    private List<String> skills;
+    private List<String> externalUrls;
     public UserProfile toEntity() {//image는s3업로드 완료후 단계에서 넣어줘야한다.skills도 따로 처리해줘야
         UserProfile userProfile = UserProfile.builder()
                 .title(title)
                 .content(content)
-                .author(author).skills(skills).name(name)
+                .author(author).skills(skills).name(name).phone(phone).externalUrls(externalUrls)
                 .build();
 
         return userProfile;

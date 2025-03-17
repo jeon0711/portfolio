@@ -18,7 +18,9 @@ public class ProfileViewResponse {
         private String author;
         private String name;
         private Image image;  // 파일 필드 (nullable)
+        private String phone;
         private List<String> skills;
+        private List<String> externalUrls;
     public ProfileViewResponse(UserProfile profile)
     {
         this.title=profile.getTitle();
@@ -27,6 +29,7 @@ public class ProfileViewResponse {
         this.image= profile.getImage();
         this.skills=profile.getSkills();
         this.name= profile.getName();
-
+        this.phone=profile.getPhone();
+        this.externalUrls=profile.getExternalUrls();
     }
 }

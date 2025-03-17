@@ -16,4 +16,5 @@ import java.util.List;
 public class UpdateArticleRequest {
     private String title;
     private String content;
+    private List<String> skills;
 }

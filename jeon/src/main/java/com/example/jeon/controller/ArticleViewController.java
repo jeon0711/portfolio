@@ -3,6 +3,7 @@ import com.example.jeon.domain.Article;
 import com.example.jeon.dto.ArticleListViewResponse;
 import com.example.jeon.dto.ArticleViewResponse;
 import com.example.jeon.service.ArticleService;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class ArticleViewController {
         @GetMapping("/{id}")
         public String getArticle(@PathVariable Long id, Model model) {
             Article article = articleService.findById(id);
+            Hibernate.initialize(article.getImages());
             model.addAttribute("article", new ArticleViewResponse(article));
 
             return "article";
@@ -45,6 +47,7 @@ public class ArticleViewController {
                 model.addAttribute("article", new ArticleViewResponse());
             } else {
                 Article article = articleService.findById(id);
+                Hibernate.initialize(article.getImages());
                 model.addAttribute("article", new ArticleViewResponse(article));
             }
 

@@ -75,22 +75,45 @@ section {
     font-size: 1.2rem;
     line-height: 1.6;
 }
-
-/* 기술 리스트 */
-.skills-list {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 1.5rem;
+        .skills-list, .links-list {
+            list-style: none;
+            padding: 0;
+        }
+        .skills-list li, .links-list li {
+            display: inline-block;
+           background: #6c757d !important;
+           color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 3px;
+        }
+        .links-list a {
+    color: white !important; /* ✅ 흰색으로 변경 */
+    text-decoration: none; /* 밑줄 제거 */
 }
 
-.skills-list li {
-    display: inline-block;
-    background: #007bff;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 5px;
-    margin: 5px;
-    font-size: 1rem;
+.links-list a:hover {
+    color: #adb5bd !important; /* ✅ 연한 회색 (호버 시) */
+    text-decoration: underline;
+}
+
+ /* 외부 링크 삭제 버튼 */
+ .remove-link {
+     background: #dc3545;
+     border: none;
+     color: white;
+     padding: 3px 7px;
+     border-radius: 3px;
+     cursor: pointer;
+ }
+
+.remove-link {
+    background: #dc3545;
+    border: none;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 /* 프로젝트 카드 */
@@ -123,4 +146,90 @@ footer {
     nav .nav-links li {
         margin: 10px 0;
     }
+}
+
+/* 공통 배경 스타일 */
+.gradient-custom {
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+}
+.edit-mode .profile-info {
+    display: none;
+}
+
+/* 기본적으로 수정 폼은 숨김 상태 */
+#edit-form {
+    display: none;
+}
+/* 카드 스타일 */
+.card {
+    border-radius: 10px;
+    padding: 20px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+}
+
+/* ✅ 입력 필드 스타일 개선 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+textarea {
+    background-color: #6c757d !important; /* 회색 */
+    color: white !important; /* 텍스트 색상 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* 입력 필드 포커스 효과 */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="file"]:focus,
+textarea:focus {
+    background-color: #5a6268 !important; /* 더 진한 회색 */
+    color: white !important;
+    border-color: #adb5bd;
+    outline: none;
+}
+
+/* 폼 입력 필드 */
+.form-control {
+    border-radius: 5px;
+}
+
+/* ✅ 버튼 스타일 - 파란색에서 회색으로 변경 */
+.btn {
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.btn-primary:hover {
+    background-color: #5a6268 !important;
+    border-color: #5a6268 !important;
+}
+
+.btn-secondary {
+    background-color: #adb5bd !important;
+    border-color: #adb5bd !important;
+}
+
+.btn-secondary:hover {
+    background-color: #909aa3 !important;
+    border-color: #909aa3 !important;
+}
+
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-danger:hover {
+    background-color: #c82333 !important;
+    border-color: #c82333 !important;
 }

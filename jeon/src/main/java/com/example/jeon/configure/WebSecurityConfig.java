@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                         // `/synthesis/{email}`에서 {email}이 이메일 형식만 허용
                         .requestMatchers("/synthesis/{email:.+@.+\\..+}").permitAll()
                         .requestMatchers("/user/login", "/user/signup").permitAll()
-
+                        .requestMatchers("/articles/{number}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                         .logoutSuccessUrl("/user/login")
                         .invalidateHttpSession(true)
                 )
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)// .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .build();
     }
     @Bean

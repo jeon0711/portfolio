@@ -82,9 +82,20 @@
                                class="btn btn-primary btn-sm">
                                 자세히 보기
                             </a>
+                            <button type="button" id="delete-btn"
+                                    th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == synthesis.userProfile.author}"
+                                    th:data-id="${article.id}" class="btn btn-danger btn-sm">삭제</button>
+                            <!--
+                                <th:block th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == synthesis.userProfile.author}">
+
+                                    <button type="button" id="delete-btn"
+                                            class="btn btn-danger btn-sm">삭제</button>
+                                </th:block>-->
+
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- 로그아웃 버튼 -->
@@ -114,7 +125,7 @@
 
 <!-- JS 파일 (정적 리소스) -->
 <!-- src/main/resources/static/js/synthesis.js 경로에 배치 -->
-<script th:src="@{/js/synthesis.js}"></script>
+<script type="module"  th:src="@{/js/synthesis.js}"></script>
 
 </body>
 </html>

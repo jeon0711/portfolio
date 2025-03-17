@@ -7,7 +7,7 @@
 
     <style>
         .gradient-custom {
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+            background: #343a40; /* 배경 어두운 색상 */
             min-height: 100vh;
         }
         .profile-card {
@@ -25,22 +25,33 @@
             object-fit: cover;
             border-radius: 10px;
         }
-        .skills-list {
+        .skills-list, .links-list {
             list-style: none;
             padding: 0;
         }
-        .skills-list li {
+        .skills-list li, .links-list li {
             display: inline-block;
-            background: #007bff;
-            color: #fff;
+           background: #6c757d !important;
+           color: white;
             padding: 5px 10px;
             border-radius: 4px;
             margin: 3px;
         }
+        .links-list a {
+    color: white !important; /* ✅ 흰색으로 변경 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.links-list a:hover {
+    color: #adb5bd !important; /* ✅ 연한 회색 (호버 시) */
+    text-decoration: underline;
+}
         .hidden {
             display: none;
         }
+
     </style>
+
 </head>
 <body class="gradient-custom">
 <section class="d-flex align-items-center vh-100">
@@ -63,13 +74,24 @@
                     <li th:each="skill : ${userProfile.skills}" th:text="${skill}"></li>
                 </ul>
 
+                <!-- 외부 링크 리스트 -->
+                <h4 class="mt-4">🔗 외부 링크</h4>
+                <ul class="links-list">
+                    <li th:each="link : ${userProfile.externalUrls}">
+                        <a th:href="${link}" th:text="${link}" target="_blank"></a>
+                    </li>
+                </ul>
+
                 <!-- 이메일 주소 -->
                 <h5 class="mt-4">📧 이메일</h5>
                 <p id="profile-author" th:text="${userProfile.author}" class="text-white-50">이메일 주소</p>
 
+                <!-- 휴대폰 번호 -->
+                <h5 class="mt-4">📱 휴대폰 번호</h5>
+                <p id="profile-phone" th:text="${userProfile.phone}" class="text-white-50">휴대폰 번호</p>
 
                 <!-- 수정 버튼 -->
-                <button class="btn btn-primary mt-3" id="modify-btn"
+                <button class="btn btn-secondary mt-2" id="modify-btn"
                         th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == userProfile.author}">
                     프로필 수정
                 </button>
@@ -91,6 +113,11 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="phone">휴대폰 번호</label>
+                        <input type="text" id="phone" class="form-control" th:value="${userProfile.phone}">
+                    </div>
+
+                    <div class="form-group">
                         <label for="image">프로필 이미지 업로드</label>
                         <input type="file" id="image" class="form-control">
                     </div>
@@ -103,12 +130,20 @@
                                 <button type="button" class="btn btn-danger btn-sm ml-2 remove-skill">X</button>
                             </li>
                         </ul>
-
-                        <!-- 추가 버튼 -->
                         <button type="button" id="add-skill" class="btn btn-secondary mt-2">+ 추가</button>
-
-                        <!-- 숨겨진 입력창 (버튼 클릭 시 표시됨) -->
                         <input type="text" id="new-skill" class="form-control mt-2 hidden" placeholder="새로운 기술 입력 후 Enter" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>외부 링크</label>
+                        <ul id="links-list" class="links-list">
+                            <li th:each="link : ${userProfile.externalUrls}" class="link-item">
+                                <a th:href="${link}" th:text="${link}" target="_blank"></a>
+                                <button type="button" class="btn btn-danger btn-sm ml-2 remove-link">X</button>
+                            </li>
+                        </ul>
+                        <button type="button" id="add-link" class="btn btn-secondary mt-2">+ 추가</button>
+                        <input type="text" id="new-link" class="form-control mt-2 hidden" placeholder="새로운 링크 입력 후 Enter" />
                     </div>
 
                     <button type="button" class="btn btn-success mt-3" id="save-btn">저장</button>
@@ -118,7 +153,7 @@
     </div>
 </section>
 
-<script src="/js/userProfile.js"></script>
+<script type="module" src="/js/userProfile.js"></script>
 
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.example.jeon.service;
 
 import com.example.jeon.domain.Image;
 import com.example.jeon.domain.UserProfile;
+import com.example.jeon.dto.AddUserProfile;
 import com.example.jeon.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,16 +25,21 @@ public class ProfileService {
     private final ImageService imageService;
     private final UserProfileRepository userProfileRepository;
     @Transactional
-    public UserProfile saveProfile(String title, String content, String author,String name, MultipartFile file, List<String> skills) throws Throwable {
+    public UserProfile saveProfile(AddUserProfile input) throws Throwable {
 
         try {
+            String title=input.getTitle();
+            String author=input.getAuthor();
+            String content=input.getContent();
+            String phone=input.getPhone();
+            String name=input.getName();
+            MultipartFile file=input.getImage();
+            List<String> skills=input.getSkills();
+            List<String> externalUrls=input.getExternalUrls();
             UserProfile rt = userProfileRepository.findByAuthor(author).orElseThrow(() -> {
                 logger.error("UserProfile not found for author: " + author);
                 return new IllegalArgumentException("Unexpected user: " + author);
             });
-            logger.info(content);
-            logger.info(rt.getAuthor());
-
             if (title != null && !title.isEmpty()) {
 
                 rt.setTitle(title);
@@ -47,7 +53,12 @@ public class ProfileService {
             {
                 rt.setName(name);
             }
+            if(phone!=null && !phone.isEmpty())
+            {
+                rt.setPhone(phone);
+            }
             rt.setSkills(skills);
+            rt.setExternalUrls(externalUrls);
             if(file!=null && !file.isEmpty()) {
                 Image srt = imageService.saveImage(author, file);
                 if (rt.getImage() != null) {

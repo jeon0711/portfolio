@@ -1,3 +1,73 @@
+import { httpRequest } from "./httpRequest.js";
+document.addEventListener("DOMContentLoaded", function () {
+
+    const addSkillButton = document.getElementById("add-skill");
+    const newSkillInput = document.getElementById("new-skill");
+    const skillsList = document.getElementById("skills-list");
+
+    const addLinkButton = document.getElementById("add-link");
+
+
+
+    // 기술 스택 업데이트 함수
+    function updateSkills() {
+        let skills = Array.from(document.querySelectorAll(".skill-item span"))
+                          .map(span => span.innerText.trim())
+                          .filter(skill => skill.length > 0);
+
+        console.log("✅ 최신 skills 목록:", skills);
+        return skills;
+    }
+
+    // 새로운 기술 추가 함수
+    function addSkill(skillName) {
+        if (!skillName.trim()) return;
+
+        let skillArray = skillName.split(/\s*,\s*|\s+/).map(skill => skill.trim()).filter(skill => skill.length > 0);
+
+        skillArray.forEach(skill => {
+            if (!Array.from(document.querySelectorAll(".skill-item span")).some(span => span.innerText === skill)) {
+                const li = document.createElement("li");
+                li.className = "skill-item";
+                li.innerHTML = `<span>${skill}</span>
+                                <button type="button" class="btn btn-danger btn-sm ml-2 remove-skill">X</button>`;
+
+                skillsList.appendChild(li);
+
+                li.querySelector(".remove-skill").addEventListener("click", function () {
+                    li.remove();
+                    updateSkills();
+                });
+            }
+        });
+
+        updateSkills();
+    }
+
+    // "기술 추가" 버튼 클릭 시 입력창 표시
+    if (addSkillButton) {
+        addSkillButton.addEventListener("click", function () {
+            newSkillInput.classList.remove("hidden");
+            newSkillInput.focus();
+        });
+
+        newSkillInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                addSkill(newSkillInput.value);
+                newSkillInput.value = "";
+            }
+        });
+    }
+
+    // 기존 기술 삭제 버튼 이벤트 추가
+    document.querySelectorAll(".remove-skill").forEach(button => {
+        button.addEventListener("click", function () {
+            this.parentElement.remove();
+            updateSkills();
+        });
+    });
+
 const deleteButton = document.getElementById('delete-btn');
 
 if (deleteButton) {
@@ -36,7 +106,7 @@ if (modifyButton) {
                     // 'images'라는 필드 이름으로 여러 파일 첨부
                     formData.append('images', file);
                 }
-
+                updateSkills().forEach(skill => formData.append("skills", skill));
                 // 3. 요청 성공/실패 콜백
                 function success() {
                     alert('수정 완료되었습니다.');
@@ -49,7 +119,7 @@ if (modifyButton) {
                 }
 
                 // 4. 멀티파트 요청 전송
-                httpRequestMultipart('PUT', `/api/articles/${id}`, formData, success, fail);
+                httpRequest('PUT', `/api/articles/${id}`, formData, success, fail);
             });
 
 }
@@ -70,6 +140,7 @@ if (createButton) {
                            // 'images'라는 필드 이름으로 여러 파일 첨부
                            formData.append('images', file);
                        }
+                        updateSkills().forEach(skill => formData.append("skills", skill));
         function success() {
             alert('등록 완료되었습니다.');
             location.replace('/articles/');
@@ -79,109 +150,9 @@ if (createButton) {
             location.replace('/articles/');
         };
         console.log("before send")
-         httpRequestMultipart('POST', `/api/articles/`, formData, success, fail);
+         httpRequest('POST', `/api/articles/`, formData, success, fail);
     });
 }
 
 
-// 쿠키를 가져오는 함수
-function getCookie(key) {
-    var result = null;
-    var cookie = document.cookie.split(';');
-    cookie.some(function (item) {
-        item = item.replace(' ', '');
-
-        var dic = item.split('=');
-
-        if (key === dic[0]) {
-            result = dic[1];
-            return true;
-        }
     });
-
-    return result;
-}
-
-// HTTP 요청을 보내는 함수
-function httpRequest(method, url, body, success, fail) {
-    fetch(url, {
-        method: method,
-        headers: { // 로컬 스토리지에서 액세스 토큰 값을 가져와 헤더에 추가
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-            'Content-Type': 'application/json',
-        },
-        body: body,
-    }).then(response => {
-    console.log("url",url);
-        if (response.status === 200 || response.status === 201) {
-            return success();
-        }
-        const refresh_token = getCookie('refresh_token');
-        if (response.status === 401 && refresh_token) {
-            fetch('/api/token', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    refreshToken: getCookie('refresh_token'),
-                }),
-            })
-                .then(res => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-                })
-                .then(result => { // 재발급이 성공하면 로컬 스토리지값을 새로운 액세스 토큰으로 교체
-                    localStorage.setItem('access_token', result.accessToken);
-                    httpRequest(method, url, body, success, fail);
-                })
-                .catch(error => fail());
-        } else {
-            return fail();
-        }
-    });
-}
-function httpRequestMultipart(method, url, formData, success, fail) {
-    fetch(url, {
-        method: method,
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('access_token')
-            // 'Content-Type': 'multipart/form-data' 직접 지정 X (FormData 사용 시 자동 생성)
-        },
-        body: formData
-    }).then(response => {
-        if (response.status === 200 || response.status === 201) {
-            return success();
-        }
-
-        // 401인 경우 리프레시 토큰 시도
-        const refresh_token = getCookie('refresh_token');
-        if (response.status === 401 && refresh_token) {
-            fetch('/api/token', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    refreshToken: refresh_token,
-                }),
-            })
-                .then(res => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-                })
-                .then(result => {
-                    // 새로 받은 accessToken 저장 후, 다시 요청
-                    localStorage.setItem('access_token', result.accessToken);
-                    httpRequestMultipart(method, url, formData, success, fail);
-                })
-                .catch(error => fail());
-        } else {
-            return fail();
-        }
-    });
-}

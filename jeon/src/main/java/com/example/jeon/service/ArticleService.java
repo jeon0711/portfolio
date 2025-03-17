@@ -32,7 +32,9 @@ public class ArticleService {
             for (MultipartFile image : images) {
                 // 파일 업로드 / DB 저장 등 처리
                 // 예: fileService.upload(image) 등
-                newArt.addImage(imageService.saveImage(userName+count,image));
+                Image ig=imageService.saveImage(newArt.getAuthor().getEmail() + count, image);
+                ig.setArticle(newArt);
+                newArt.addImage(ig);
                 count++;
             }
         }
@@ -77,14 +79,16 @@ public class ArticleService {
                     .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
 
             authorizeArticleAuthor(article);
-            article.update(request.getTitle(), request.getContent());
+            article.update(request.getTitle(), request.getContent(),request.getSkills());
             logger.info(request.getContent());
             if (images != null && !images.isEmpty()) {
                 int count = 1;
                 for (MultipartFile image : images) {
                     // 파일 업로드 / DB 저장 등 처리
                     // 예: fileService.upload(image) 등
-                    article.addImage(imageService.saveImage(article.getAuthor().getEmail() + count, image));
+                    Image ig=imageService.saveImage(article.getAuthor().getEmail() + count, image);
+                    ig.setArticle(article);
+                    article.addImage(ig);
                     count++;
                 }
             }
