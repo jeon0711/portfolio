@@ -41,6 +41,7 @@ public class UserController {
     {
         return "user/signup";
     }
+    //안씀
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response)
     {try {

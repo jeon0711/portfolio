@@ -46,7 +46,7 @@ public class SynthesisController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated() && auth.getName().equals(email)) {
                 logger.info("synthesis:redirect");
-                return "redirect:synthesis/";
+                return "redirect:/synthesis/";
             }
 
             SynthesisResponse rt = synthesisService.findByEmail(email).orElse(null);

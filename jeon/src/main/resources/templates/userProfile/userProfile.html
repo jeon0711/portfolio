@@ -58,8 +58,8 @@
     <div class="container">
         <div class="card profile-card text-center">
             <!-- 프로필 이미지 -->
-            <div th:if="${userProfile.image}">
-                <img th:src="${userProfile.image.url}" alt="프로필 이미지" class="profile-img">
+            <div th:if="${userProfile?.image!=null}">
+                <img th:src="${userProfile?.image?.url}" alt="프로필 이미지" class="profile-img">
             </div>
 
             <div class="card-body">
@@ -88,8 +88,7 @@
 
                 <!-- 휴대폰 번호 -->
                 <h5 class="mt-4">📱 휴대폰 번호</h5>
-                <p id="profile-phone" th:text="${userProfile.phone}" class="text-white-50">휴대폰 번호</p>
-
+                <p id="profile-phone" th:text="${userProfile?.phone}" class="text-white-50">휴대폰 번호</p>
                 <!-- 수정 버튼 -->
                 <button class="btn btn-secondary mt-2" id="modify-btn"
                         th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == userProfile.author}">

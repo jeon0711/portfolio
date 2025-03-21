@@ -17,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.net.URLEncoder;
+
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
@@ -44,7 +46,11 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/user/login")
+                        .loginProcessingUrl("/user/login")
                         .defaultSuccessUrl("/synthesis/")
+                        .failureHandler((request, response, exception) -> {
+                            response.sendRedirect("/user/login?error=true&message=" + URLEncoder.encode(exception.getMessage(), "UTF-8"));
+                        })
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/user/login")

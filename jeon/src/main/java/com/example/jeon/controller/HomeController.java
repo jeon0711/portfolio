@@ -35,7 +35,7 @@ public class HomeController {
                 throw new IllegalArgumentException("잘못된 이메일 형식입니다.");
             }
 
-            return "redirect:synthesis/"+email;
+            return "redirect:/synthesis/"+email;
         } catch (Throwable e) {
             logger.error(e.getMessage());
             return "redirect:/";

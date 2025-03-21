@@ -48,7 +48,7 @@ public class ProfileViewController {
             UserProfile article = profileService.searchProfile(principal.getName());
             logger.info(principal.getName());
             model.addAttribute("userProfile", new ProfileViewResponse(article));
-            return "userProfile/updateProfile";
+            return "userProfile/userProfile";
         } catch (EntityNotFoundException e) {
             // 프로필을 찾을 수 없는 경우 404 페이지로 이동
             return "error/404";
