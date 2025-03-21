@@ -32,7 +32,7 @@
                         <h2 class="text-center text-dark">SIGN UP</h2>
                         <p class="text-center text-muted">서비스 사용을 위한 회원 가입</p>
 
-                        <form th:action="@{/user/}" method="POST">
+                        <form th:action="@{/user/signup}" method="POST">
                             <!-- CSRF 보안 토큰 -->
                             <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 

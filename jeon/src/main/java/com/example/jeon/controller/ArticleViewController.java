@@ -28,7 +28,7 @@ public class ArticleViewController {
                     .toList();
             model.addAttribute("articles", articles);
 
-            return "redirect:/synthesis/"+principal.getName();
+            return "redirect:synthesis/"+principal.getName();
         }
 
         @GetMapping("/{id}")

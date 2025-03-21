@@ -101,12 +101,7 @@ public class ProfileControllerTest {
         );
 
         // JSON 데이터 생성
-        AddUserProfile input = new AddUserProfile(
-                "Test Title",
-                "Test Content",
-                "Test Name",
-                mockImage
-        );
+        AddUserProfile input = new AddUserProfile();
         String inputJson = objectMapper.writeValueAsString(input);
 
         // JSON 데이터를 포함하는 MockMultipartFile 생성

@@ -33,7 +33,7 @@
 
 
     <!-- 로그인 했을 때 -->
-    <form th:if="${#authorization.expression('isAuthenticated()')}" th:action="@{user/logout}" method="post">
+    <form th:if="${#authorization.expression('isAuthenticated()')}" th:action="@{/logout}" method="post">
         <button type="submit" class="btn btn-outline-danger">로그아웃</button>
     </form>
 
@@ -101,7 +101,6 @@
                 </div>
             </div>
 
-            <!-- 로그아웃 버튼 -->
 
         </div>
     </section>
