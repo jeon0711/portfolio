@@ -6,6 +6,8 @@ import com.example.jeon.dto.SynthesisResponse;
 import com.example.jeon.service.ProfileService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,14 +19,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
-    private final ProfileService profileService;
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
     @GetMapping("/")
     public String index() {
        return "index";
     }
-    @GetMapping("/{email}")
+    @GetMapping("/home/{email}")
     public String findByEmail(@PathVariable String email,Model model) {
         try {
+            logger.info("home:email");
             if (email == null || email.isBlank()) { // 빈 값 체크
                 return "redirect:/";
             }
@@ -34,7 +37,8 @@ public class HomeController {
 
             return "redirect:synthesis/"+email;
         } catch (Throwable e) {
-            return "login";
+            logger.error(e.getMessage());
+            return "redirect:/";
         }
 
     }

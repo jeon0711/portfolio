@@ -26,7 +26,7 @@ public class UserProfile extends  BaseTimeEntity {
     private String name;//이름
     @Column(name="title",nullable = false)
     private String title;
-    @Column(name="content",nullable = true)
+    @Column(name = "content", columnDefinition = "TEXT", nullable = true)
     private String content;
     @Convert(converter = StringListConverter.class) // JSON 변환 적용
     private List<String> skills;

@@ -22,21 +22,16 @@ import java.util.Optional;
 public class SynthesisController {
     private static final Logger logger = LoggerFactory.getLogger(SynthesisController.class);
     private final SynthesisService synthesisService;
-    @GetMapping()
-    public String indexPage()
-    {
-        return "redirect:/";
-    }
     @GetMapping("/")
-    public String findByEmail(Principal principal, Model model) {
+    public String defaultRoot(Principal principal, Model model) {
         try {
             SynthesisResponse rt = synthesisService.findByEmail(principal.getName()).orElse(null);
             model.addAttribute("synthesis",rt);
             return "synthesis";
         }
         catch(Throwable e)
-        {
-            return "user/login";
+        { logger.error(e.getMessage());
+            return "redirect:/";
         }
 
     }
@@ -44,19 +39,22 @@ public class SynthesisController {
     public String findByEmail(@PathVariable String email,Model model) {
         try {
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                logger.info(email);
                 throw new IllegalArgumentException("잘못된 이메일 형식입니다.");
             }
 
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated() && auth.getName().equals(email)) {
-                return "redirect:/";
+                logger.info("synthesis:redirect");
+                return "redirect:/synthesis/";
             }
 
             SynthesisResponse rt = synthesisService.findByEmail(email).orElse(null);
             model.addAttribute("synthesis", rt);
             return "synthesis";
         } catch (Throwable e) {
-            return "user/login";
+            logger.error(e.getMessage());
+            return "redirect:/";
         }
 
     }

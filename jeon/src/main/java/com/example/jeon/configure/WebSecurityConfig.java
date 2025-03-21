@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                         .logoutSuccessUrl("/user/login")
                         .invalidateHttpSession(true)
                 )
-                .csrf(AbstractHttpConfigurer::disable)// .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .build();
     }
     @Bean

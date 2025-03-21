@@ -20,26 +20,31 @@
 <!-- 헤더 -->
 <header>
     <div class="container">
-        <h1 th:text="${synthesis.userProfile.title}"></h1>
-        <p class="lead text-white-50" th:text="${synthesis.userProfile.author}"></p>
+        <h1 th:text="${synthesis.userProfile.name + '의 이력서입니다.'}"></h1>
     </div>
 </header>
 
 <!-- 네비게이션 바 -->
-<nav>
-    <ul class="nav-links">
-        <li><a href="#about">소개</a></li>
-        <li><a href="#skills">기술</a></li>
-        <li><a href="#projects">프로젝트</a></li>
-        <li><a href="#contact">연락처</a></li>
-    </ul>
+
+<nav class="navbar navbar-light bg-light justify-content-end px-3">
+
+    <!-- 로그인 안 했을 때 -->
+    <a th:if="${#authorization.expression('!isAuthenticated()')}" href="user/login">로그인</a>
+
+
+    <!-- 로그인 했을 때 -->
+    <form th:if="${#authorization.expression('isAuthenticated()')}" th:action="@{user/logout}" method="post">
+        <button type="submit" class="btn btn-outline-danger">로그아웃</button>
+    </form>
+
 </nav>
+
 
 <!-- 메인 컨텐츠 -->
 <main>
     <!-- 자기소개 섹션 -->
     <section id="about">
-        <h2>소개</h2>
+        <h2 th:text="${synthesis.userProfile.title}"></h2>
         <div class="about-container">
             <img th:src="${synthesis.userProfile.image.url}" alt="프로필 사진" class="profile-img">
             <div class="about-text">
@@ -78,6 +83,12 @@
                             <p class="text-muted"
                                th:text="|작성일: ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|"></p>
                             <p class="card-text" th:text="${article.content}"></p>
+
+                            <!-- 사용된 기술 목록 -->
+                            <div class="skills">
+                                <p><strong>사용된 기술:</strong> <span th:text="${#strings.listJoin(article.skills, ', ')}"></span></p>
+                            </div>
+
                             <a th:href="@{/articles/{id}(id=${article.id})}"
                                class="btn btn-primary btn-sm">
                                 자세히 보기
@@ -85,42 +96,39 @@
                             <button type="button" id="delete-btn"
                                     th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == synthesis.userProfile.author}"
                                     th:data-id="${article.id}" class="btn btn-danger btn-sm">삭제</button>
-                            <!--
-                                <th:block th:if="${#authorization.expression('isAuthenticated()') and #authentication.name == synthesis.userProfile.author}">
-
-                                    <button type="button" id="delete-btn"
-                                            class="btn btn-danger btn-sm">삭제</button>
-                                </th:block>-->
-
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <!-- 로그아웃 버튼 -->
-            <button type="button" class="btn btn-secondary mt-4"
-                    onclick="location.href='/user/logout'">
-                로그아웃
-            </button>
+
         </div>
     </section>
 
     <!-- 연락처 섹션 -->
     <section id="contact">
-        <h2>연락처</h2>
-        <p>Email: honggildong@example.com</p>
-        <p>LinkedIn:
-            <a href="https://linkedin.com/in/honggildong" target="_blank">
-                프로필 보기
-            </a>
-        </p>
+
+
+        <!-- 이메일 주소 -->
+        <h5 class="mt-4">📧 이메일</h5>
+        <p id="profile-author" th:text="${synthesis.userProfile.author}" >이메일 주소</p>
+
+        <!-- 휴대폰 번호 -->
+        <h5 class="mt-4">📱 휴대폰 번호</h5>
+        <p id="profile-phone" th:text="${synthesis.userProfile.phone}" >휴대폰 번호</p>
+        <h4 class="mt-4">🔗 외부 링크</h4>
+        <ul class="links-list">
+            <li th:each="link : ${synthesis.userProfile.externalUrls}">
+                <a th:href="${link}" th:text="${link}" target="_blank"></a>
+            </li>
+        </ul>
     </section>
 </main>
 
 <!-- 푸터 -->
 <footer>
-    <p>&copy; 2025 홍길동. All rights reserved.</p>
+    <p>&copy; 2025 전준영. All rights reserved.</p>
 </footer>
 
 <!-- JS 파일 (정적 리소스) -->

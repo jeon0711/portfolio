@@ -1,5 +1,6 @@
 package com.example.jeon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +27,7 @@ public class User implements UserDetails {
     private String password;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
+    @JsonIgnore
     private UserProfile userProfile;
 
      @Builder
