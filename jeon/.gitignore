@@ -38,3 +38,4 @@ out/
 .env.properties
 Dockerfile
 docker-compose.yml
+*.jar
