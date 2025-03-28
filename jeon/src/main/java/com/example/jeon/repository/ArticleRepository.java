@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
-    List<Article> findAllByAuthor_Id(long uid);
+    List<Article> findAllByAuthor_Id(long uid);//default,asc
+    List<Article> findAllByAuthor_IdOrderByCreatedAtDesc(long uid);
 }

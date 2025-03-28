@@ -91,8 +91,7 @@
                             <h5 class="card-title" th:text="${article.title}"></h5>
                             <p class="text-muted"
                                th:text="|작성일: ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|"></p>
-                            <p class="card-text" th:text="${article.content}"></p>
-
+                            <p class="card-text" style="white-space: pre-line;" th:text="${article.preview}"></p>
                             <!-- 사용된 기술 목록 -->
                             <div class="skills">
                                 <p><strong>사용된 기술:</strong> <span th:text="${#strings.listJoin(article.skills, ', ')}"></span></p>

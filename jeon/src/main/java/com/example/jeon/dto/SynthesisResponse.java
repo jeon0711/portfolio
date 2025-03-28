@@ -14,6 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 public class SynthesisResponse {
-        private List<Article> articles;
+        private List<ArticleListViewResponse> articles;
         private UserProfile userProfile;
 }
