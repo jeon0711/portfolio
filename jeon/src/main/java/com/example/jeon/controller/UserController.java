@@ -25,7 +25,7 @@ public class UserController {
         try{
      userService.save(request);
      logger.info("회원가입 성공");
-     return "redirect:user/login";} catch (Exception e) {
+     return "redirect:/user/login";} catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -47,7 +47,7 @@ public class UserController {
     {try {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         logger.info("로그아웃 성공");
-        return "redirect:user/login";
+        return "redirect:/user/login";
     } catch (Exception e) {
         logger.error(e.getMessage());
         throw new RuntimeException(e);
