@@ -33,10 +33,15 @@ out/
 /nbdist/
 /.nb-gradle/
 
+# MySQL data directory (Docker volume)
+mysql_data/
+**/mysql_data/
+
 ### VS Code ###
 .vscode/
 .env.properties
 Dockerfile
 docker-compose.yml
+.dockerignore
 *.jar
 *.tar
