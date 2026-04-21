@@ -1,5 +1,6 @@
 package com.example.jeon.controller;
 
+import com.example.jeon.facade.ProfileFacade;
 import com.example.jeon.service.ProfileService;
 import com.example.jeon.domain.UserProfile;
 import com.example.jeon.dto.AddUserProfile;
@@ -24,14 +25,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController {
-    private final ProfileService profileService;
+    private final ProfileFacade profileFacade;
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
     @PutMapping("/")
     public ResponseEntity<UserProfile> saveProfile(HttpServletRequest request, @ModelAttribute AddUserProfile input, Principal principal) throws IOException {
         try {
             String referer = request.getHeader("Referer"); // 요청을 보낸 페이지의 URL
             String requestURL = request.getRequestURL().toString(); //
-            UserProfile rt = profileService.saveProfile(input);
+            UserProfile rt = profileFacade.save(input);
             return ResponseEntity.created(URI.create(requestURL)).body(rt);
         }
         catch(Throwable e)

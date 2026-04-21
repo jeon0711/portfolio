@@ -21,30 +21,21 @@ import java.util.List;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final UserService userService;
-    private final ImageService imageService;
     private static final Logger logger = LoggerFactory.getLogger(ArticleService.class);
-    public Article save(AddArticleRequest request, String userName,List<MultipartFile> images) {
 
-        try{User user=userService.findByEmail(userName);
-        Article newArt=request.toEntity(user);
-            if (images != null && !images.isEmpty()) {
-            int count=1;
-            for (MultipartFile image : images) {
-                // 파일 업로드 / DB 저장 등 처리
-                // 예: fileService.upload(image) 등
-                Image ig=imageService.saveImage(newArt.getAuthor().getEmail() + count, image);
-                ig.setArticle(newArt);
-                newArt.addImage(ig);
-                count++;
-            }
-        }
-        return articleRepository.save(newArt);
-        } catch (Throwable e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
+    public Article saveOnlyArticle(AddArticleRequest request, String userName) {
+        User user = userService.findByEmail(userName);
+        Article newArt = request.toEntity(user);
+        return articleRepository.save(newArt); // 순수하게 게시글만 저장
     }
 
+
+    public Article updateOnlyArticle(long id, UpdateArticleRequest request) {
+        Article article = findById(id);
+        authorizeArticleAuthor(article);
+        article.update(request.getTitle(), request.getContent(), request.getSkills());
+        return article; // 변경 감지(Dirty Check) 활용
+    }
     public List<Article> findAll() {
         return articleRepository.findAll();
     }
@@ -70,34 +61,6 @@ public class ArticleService {
 
         authorizeArticleAuthor(article);
         articleRepository.delete(article);
-    }
-
-    @Transactional
-    public Article update(long id, UpdateArticleRequest request,List<MultipartFile> images) {
-        try {
-            Article article = articleRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
-
-            authorizeArticleAuthor(article);
-            article.update(request.getTitle(), request.getContent(),request.getSkills());
-            logger.info(request.getContent());
-            if (images != null && !images.isEmpty()) {
-                int count = 1;
-                for (MultipartFile image : images) {
-                    // 파일 업로드 / DB 저장 등 처리
-                    // 예: fileService.upload(image) 등
-                    Image ig=imageService.saveImage(article.getAuthor().getEmail() + count, image);
-                    ig.setArticle(article);
-                    article.addImage(ig);
-                    count++;
-                }
-            }
-            //articleRepository호출 불필요
-            return article;
-        } catch (Throwable e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
     }
 
     // 게시글을 작성한 유저인지 확인

@@ -22,10 +22,9 @@ public class ProfileService {
 
 
     private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
-    private final ImageService imageService;
     private final UserProfileRepository userProfileRepository;
     @Transactional
-    public UserProfile saveProfile(AddUserProfile input) throws Throwable {
+    public UserProfile saveProfileInfo(AddUserProfile input) throws Throwable {
 
         try {
             String title=input.getTitle();
@@ -33,7 +32,6 @@ public class ProfileService {
             String content=input.getContent();
             String phone=input.getPhone();
             String name=input.getName();
-            MultipartFile file=input.getImage();
             List<String> skills=input.getSkills();
             List<String> externalUrls=input.getExternalUrls();
             UserProfile rt = userProfileRepository.findByAuthor(author).orElseThrow(() -> {
@@ -59,15 +57,6 @@ public class ProfileService {
             }
             rt.setSkills(skills);
             rt.setExternalUrls(externalUrls);
-            if(file!=null && !file.isEmpty()) {
-                Image srt = imageService.saveImage(author, file);
-                if (rt.getImage() != null) {
-
-                   // imageService.deleteImage(rt.getImage().getId(),rt.getImage().getUrl());
-                    imageService.softDeleteImage(rt.getImage().getId());
-                }
-                rt.addImage(srt);
-            }
             logger.info(rt.getTitle());
             userProfileRepository.save(rt);
             return rt;

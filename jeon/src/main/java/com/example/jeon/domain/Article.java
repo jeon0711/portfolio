@@ -31,7 +31,7 @@ public class Article  extends  BaseTimeEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User author;
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval =true)
-    private List<Image> images = new ArrayList<Image>();
+    private List<ArticleImage> articleImages = new ArrayList<ArticleImage>();
     @Convert(converter = StringListConverter.class) // JSON 변환 적용
     private List<String> skills=new ArrayList<String>();
 
@@ -52,8 +52,8 @@ public class Article  extends  BaseTimeEntity{
         this.skills=skills;
     }
     // 추가 로직: 이미지 추가 메서드
-    public void addImage(Image image) {
-        images.add(image);
+    public void addImage(ArticleImage image) {
+        articleImages.add(image);
     }
     // Getters and Setters
 }

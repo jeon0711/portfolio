@@ -36,7 +36,7 @@ public class UserProfile extends  BaseTimeEntity {
     private List<String> externalUrls;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id", referencedColumnName = "id",nullable =true)
-    private Image image;
+    private ProfileImage profileImage;
     @OneToOne(mappedBy = "userProfile")
     private User user;
 
@@ -59,11 +59,6 @@ public class UserProfile extends  BaseTimeEntity {
         this.name=name;
         this.externalUrls=externalUrls;
         this.phone=phone;
-
-    }
-    public void addImage(Image image) {//하기전에 비었는지 확인후 안비었으면 이미지 삭제
-
-        this.image = image;
 
     }
 

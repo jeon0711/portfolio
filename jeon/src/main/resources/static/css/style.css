@@ -235,3 +235,56 @@ textarea:focus {
     background-color: #c82333 !important;
     border-color: #c82333 !important;
 }
+/* 이미지 관리 카드 제목 */
+.image-preview-title {
+    color: #333;
+    font-weight: bold;
+}
+
+/* 이미지 리스트 컨테이너 */
+.image-list-container {
+    gap: 10px; /* 이미지 사이 간격 */
+}
+
+/* 이미지 썸네일 스타일 */
+.uploaded-preview-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* 이미지 아이템 호버 효과 */
+.existing-img-wrapper:hover .uploaded-preview-img {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 기존 이미지 삭제 버튼 커스텀 */
+.delete-existing-img {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    line-height: 24px;
+    border-radius: 50%; /* 원형 버튼 */
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.delete-existing-img:hover {
+    opacity: 1; /* 마우스 올리면 선명하게 */
+}
+
+/* 기술 스택 리스트와 통일감 부여 */
+.image-management-card {
+    background-color: #f8f9fa; /* 기존 .card 배경색과 통일 */
+}

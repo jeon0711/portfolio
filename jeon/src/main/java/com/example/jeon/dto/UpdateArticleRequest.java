@@ -17,4 +17,5 @@ public class UpdateArticleRequest {
     private String title;
     private String content;
     private List<String> skills;
+    private List<Long> deleteImageIds; // 추가된 필드
 }
